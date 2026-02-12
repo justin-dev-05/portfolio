@@ -1,20 +1,19 @@
-<<<<<<< HEAD
-# pdi_dost
+🚗 PDIDost
 
-A new Flutter project.
+PDIDost is a car inspection booking and management application designed to simplify the process of scheduling, tracking, and managing vehicle inspections. The app provides a seamless experience for users to book inspections, monitor inspection status, and access inspection history from a single platform.
 
-## Getting Started
+PDIDost supports end-to-end inspection workflows, including inquiry management, upcoming and pending inspections, and detailed inspection records. With a structured dashboard and intuitive navigation, the app ensures transparency and efficiency for both users and inspection teams.
 
-This project is a starting point for a Flutter application.
+The application is built with scalability and performance in mind, making it suitable for individual users, service providers, and enterprise-level inspection operations.
 
-A few resources to get you started if this is your first Flutter project:
+🔹 Key Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Car inspection booking and inquiry management
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# PDI-Dost
->>>>>>> 5b88ea983584c42c7bfc2fe0604eaa32a8182f83
+Dashboard with pending, upcoming, and total inspections
+
+Inspection history and status tracking
+
+Secure login and account management
+
+Clean, user-friendly mobile interface
