@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Flutter Portfolio
 
 A modern, responsive portfolio website built with Flutter. Designed with a mobile-first approach, it automatically adapts to look great on phones, tablets, and desktop screens.
@@ -213,3 +214,7 @@ MIT License - feel free to use this template for your own portfolio!
 - Design inspired by modern portfolio trends
 - Icons by Font Awesome
 - Fonts by Google Fonts
+=======
+# portfolio
+Personal portfolio website built with Flutter, showcasing projects, skills, and experience.
+>>>>>>> 3eb5793bd5abdb3e0d0275f9539c67614bbfe9f0
