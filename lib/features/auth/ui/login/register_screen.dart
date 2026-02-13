@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
 import 'package:pdi_dost/core/widgets/app_text_field.dart';
 import 'package:pdi_dost/core/widgets/common_scaffold.dart';
 import 'package:pdi_dost/core/widgets/form_validation_helper.dart';
-import '../bloc/auth_bloc.dart';
+import '../../bloc/auth/auth_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,7 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final isNameValid =
         FormValidators.required(
           _name.text.text.trim(),
-          message: 'Name is required',
+          message: ValidationStrings.nameRequired,
         ) ==
         null;
     final isEmailValid = FormValidators.email(_email.text.text.trim()) == null;
@@ -81,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Header
                   FadeInDown(
                     child: Text(
-                      'Create Account',
+                      AppStrings.createAccount,
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColor,
@@ -92,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   FadeInDown(
                     delay: const Duration(milliseconds: 200),
                     child: Text(
-                      'Join us and start organizing your life like a pro.',
+                      AppStrings.joinUsSubtitle,
                       style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                     ),
                   ),
@@ -101,17 +103,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Name Field
                   FadeInLeft(
                     child: AppField(
-                      label: 'Full Name',
+                      label: AppStrings.fullName,
                       controller: _name.text,
                       focusNode: _name.focus,
-                      hint: 'Enter your full name',
+                      hint: AppStrings.fullNameHint,
                       isRequired: true,
                       prefix: const Icon(Icons.person_outline),
                       keyboardType: TextInputType.name,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (v) => FormValidators.required(
                         v,
-                        message: 'Name is required',
+                        message: ValidationStrings.nameRequired,
                       ),
                       onChanged: (_) => _validateForm(),
                     ),
@@ -122,17 +124,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   FadeInLeft(
                     delay: const Duration(milliseconds: 100),
                     child: AppField(
-                      label: 'Email Address',
+                      label: AppStrings.emailAddress,
                       controller: _email.text,
                       focusNode: _email.focus,
-                      hint: 'Enter your email',
+                      hint: AppStrings.emailHint,
                       isRequired: true,
                       prefix: const Icon(Icons.email_outlined),
                       keyboardType: TextInputType.emailAddress,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: FormValidators.email,
                       onChanged: (_) => _validateForm(),
-                      helperText: 'We\'ll send important updates to this email',
+                      helperText: AppStrings.emailUpdates,
                     ),
                   ),
                   SizedBox(height: 20.h),
@@ -141,10 +143,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   FadeInLeft(
                     delay: const Duration(milliseconds: 200),
                     child: AppField(
-                      label: 'Password',
+                      label: AppStrings.password,
                       controller: _password.text,
                       focusNode: _password.focus,
-                      hint: 'Create a strong password',
+                      hint: AppStrings.passwordHintCreate,
                       isRequired: true,
                       variant: FieldVariant.password,
                       prefix: const Icon(Icons.lock_outline_rounded),
@@ -152,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validator: (v) =>
                           FormValidators.password(v, minLength: 6),
                       onChanged: (_) => _validateForm(),
-                      helperText: 'Minimum 6 characters, letters and numbers',
+                      helperText: AppStrings.passwordRequirement,
                     ),
                   ),
                   SizedBox(height: 40.h),
@@ -162,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
                         return AppButton(
-                          text: 'Create Account',
+                          text: AppStrings.createAccount,
                           icon: Icons.person_add_outlined,
                           isEnabled: _isFormValid && state is! AuthLoading,
                           isLoading: state is AuthLoading,
@@ -179,12 +181,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already have an account?',
+                          AppStrings.alreadyHaveAccount,
                           style: TextStyle(fontSize: 14.sp),
                         ),
                         AppTextButton(
-                          text: 'Login',
-                          onPressed: () => Navigator.pop(context),
+                          text: AppStrings.login,
+                          onPressed: () => AppNav.pop(context),
                         ),
                       ],
                     ),

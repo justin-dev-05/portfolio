@@ -1,54 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'app_dialog.dart';
+import 'package:pdi_dost/core/widgets/app_dialogs.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
 
-/// Modern API BLoC Listener for state hierarchies (using inheritance pattern)
-/// 
-/// Usage for states that use inheritance (AuthLoading, AuthSuccess, AuthFailure):
-/// ```dart
-/// ApiStateBlocListener<AuthBloc, AuthState>(
-///   loadingStateType: AuthLoading,
-///   successStateType: AuthAuthenticated,
-///   failureStateType: AuthFailure,
-///   errorExtractor: (state) => (state as AuthFailure).message,
-///   autoPopOnSuccess: true,
-///   successMessage: 'Profile updated successfully',
-///   child: YourWidget(),
-/// )
-/// ```
 class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatelessWidget {
   final Widget child;
-  
+
   /// The Type of the loading state (e.g., AuthLoading)
   final Type loadingStateType;
-  
+
   /// The Type of the success state (e.g., AuthAuthenticated)
   final Type successStateType;
-  
+
   /// The Type of the failure state (e.g., AuthFailure)
   final Type failureStateType;
-  
+
   /// Function to extract error message from failure state
   final String? Function(S state)? errorExtractor;
-  
+
   /// Whether to show success dialog
   final bool showSuccessDialog;
-  
+
   /// Whether to automatically pop the current route on success
   final bool autoPopOnSuccess;
-  
+
   /// Success message to display
   final String? successMessage;
-  
+
   /// Success dialog title
   final String successTitle;
-  
+
   /// Error dialog title
   final String errorTitle;
-  
+
   /// Custom callback on success
   final VoidCallback? onSuccess;
-  
+
   /// Custom callback on failure
   final VoidCallback? onFailure;
 
@@ -78,7 +65,7 @@ class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatelessWidget {
           AppDialogs.showLoading(context);
         } else if (stateType == successStateType) {
           if (autoPopOnSuccess && Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
+            AppNav.pop(context);
           }
 
           if (showSuccessDialog) {
@@ -93,8 +80,9 @@ class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatelessWidget {
             );
           }
         } else if (stateType == failureStateType) {
-          final errorMessage = errorExtractor?.call(state) ?? 'Something went wrong';
-          
+          final errorMessage =
+              errorExtractor?.call(state) ?? 'Something went wrong';
+
           AppDialogs.showMessage(
             context: context,
             title: errorTitle,

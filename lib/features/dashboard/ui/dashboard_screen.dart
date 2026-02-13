@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/constants/helper.dart';
-import 'package:pdi_dost/core/widgets/app_dialog.dart';
-import '../../auth/ui/profile_screen.dart';
+import 'package:pdi_dost/core/widgets/app_dialogs.dart';
+import '../../profile/ui/profile_screen.dart';
 import '../../home/ui/home_screen.dart';
-import '../bloc/bottom_nav_bloc.dart';
+import '../bloc/bottom_nav/bottom_nav_bloc.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -94,7 +94,7 @@ class PlaceholderScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       // body: Center(child: Text('$title Screen Placeholder')),
-      body: Center(child: Text('Comming soon..')),
+      body: Center(child: Text(AppStrings.comingSoon)),
     );
   }
 }

@@ -38,6 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (event.email.contains('@') && event.password.length > 5) {
         final username = event.email.split('@')[0];
         await sharedPreferences.setString(_userKey, username);
+        await sharedPreferences.setString(_emailKey, event.email);
         emit(AuthAuthenticated(username: username, email: event.email));
       } else {
         emit(const AuthFailure('Invalid email or password (min 6 chars)'));
@@ -50,12 +51,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // Mock success for any input
       final username = event.email.split('@')[0];
       await sharedPreferences.setString(_userKey, username);
+      await sharedPreferences.setString(_emailKey, event.email);
       emit(AuthAuthenticated(username: username, email: event.email));
     });
 
     on<AuthLogoutRequested>((event, emit) async {
       emit(AuthLoading());
       await sharedPreferences.remove(_userKey);
+      await sharedPreferences.remove(_emailKey);
+      await sharedPreferences.remove(_imageKey);
       await Future.delayed(const Duration(milliseconds: 500));
       emit(AuthUnauthenticated());
     });

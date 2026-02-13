@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'login_screen.dart';
-import '../bloc/onboarding_bloc.dart';
-import '../bloc/onboarding_event.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
+import 'package:pdi_dost/features/auth/bloc/onboarding/onboarding_bloc.dart';
+import '../login/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -19,20 +20,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingData> _data = [
     OnboardingData(
-      title: 'Manage Your Tasks',
-      description: 'Easily organize your daily tasks and stay productive.',
+      title: AppStrings.onboarding1Title,
+      description: AppStrings.onboarding1Desc,
       icon: Icons.task_alt_rounded,
       color: const Color(0xFF6366F1),
     ),
     OnboardingData(
-      title: 'Set Priorities',
-      description: 'Highlight important tasks and never miss a deadline.',
+      title: AppStrings.onboarding2Title,
+      description: AppStrings.onboarding2Desc,
       icon: Icons.priority_high_rounded,
       color: const Color(0xFFF43F5E),
     ),
     OnboardingData(
-      title: 'Track Progress',
-      description: 'View your statistics and see how much you have achieved.',
+      title: AppStrings.onboarding3Title,
+      description: AppStrings.onboarding3Desc,
       icon: Icons.bar_chart_rounded,
       color: const Color(0xFF10B981),
     ),
@@ -40,10 +41,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _onFinish() {
     context.read<OnboardingBloc>().add(CompleteOnboarding());
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
-    );
+    AppNav.replace(context, const LoginScreen());
   }
 
   @override
@@ -70,11 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           color: item.color.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
-                          item.icon,
-                          size: 100.sp,
-                          color: item.color,
-                        ),
+                        child: Icon(item.icon, size: 100.sp, color: item.color),
                       ),
                     ),
                     SizedBox(height: 50.h),
@@ -116,7 +110,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 TextButton(
                   onPressed: _onFinish,
                   child: Text(
-                    'Skip',
+                    AppStrings.skip,
                     style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                   ),
                 ),

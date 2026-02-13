@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/network/network_cubit.dart';
 import 'package:pdi_dost/core/widgets/no_internet_widget.dart';
+import 'package:pdi_dost/core/widgets/toolbar.dart';
 
 class CommonScaffold extends StatelessWidget {
   final String? title;
@@ -11,6 +11,7 @@ class CommonScaffold extends StatelessWidget {
   final Widget? drawer;
   final List<Widget>? actions;
   final bool showAppBar;
+  final PreferredSizeWidget? appBar;
   final bool centerTitle;
 
   const CommonScaffold({
@@ -20,6 +21,7 @@ class CommonScaffold extends StatelessWidget {
     this.floatingActionButton,
     this.drawer,
     this.actions,
+    this.appBar,
     this.showAppBar = true,
     this.centerTitle = true,
   });
@@ -45,15 +47,14 @@ class CommonScaffold extends StatelessWidget {
           child: Scaffold(
             drawer: drawer,
             appBar: showAppBar
-                ? AppBar(
-                    title: title != null ? Text(title!) : null,
+                ? Toolbar.simple(
+                    context,
+                    title: title ?? '',
                     centerTitle: centerTitle,
-                    elevation: 0,
-                    backgroundColor: AppColors.transparent,
                     actions: actions,
                   )
-                : null,
-            body: body,
+                : appBar,
+            body: SafeArea(child: body),
             floatingActionButton: floatingActionButton,
           ),
         );

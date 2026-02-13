@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'app_dialog.dart';
+import 'package:pdi_dost/core/widgets/app_dialogs.dart';
 
 class ApiBlocListener<B extends BlocBase<S>, S> extends StatelessWidget {
   final Widget child;

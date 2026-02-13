@@ -107,11 +107,12 @@ class _AppTextFieldState extends State<AppTextField> {
             : null,
         prefixIconConstraints: BoxConstraints(minWidth: 40.w),
         suffixIcon: isPassword
-            ? GestureDetector(
-                onTap: () => setState(() => _obscureText = !_obscureText),
-                child: Padding(
-                  padding: EdgeInsets.only(right: 12.w),
-                  child: Icon(
+            ? Padding(
+                padding: EdgeInsets.only(right: 8.w),
+                child: IconButton(
+                  onPressed: () => setState(() => _obscureText = !_obscureText),
+                  visualDensity: VisualDensity.compact,
+                  icon: Icon(
                     _obscureText
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
@@ -124,7 +125,7 @@ class _AppTextFieldState extends State<AppTextField> {
               )
             : widget.suffix != null
             ? Padding(
-                padding: EdgeInsets.only(right: 12.w),
+                padding: EdgeInsets.only(right: 8.w),
                 child: widget.suffix,
               )
             : null,

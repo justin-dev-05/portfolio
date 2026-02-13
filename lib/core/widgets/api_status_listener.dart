@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/network/api_state.dart';
-import 'app_dialog.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
+import 'package:pdi_dost/core/widgets/app_dialogs.dart';
 
 class ApiStatusListener<B extends BlocBase<S>, S extends ApiState>
     extends StatelessWidget {
@@ -40,9 +42,9 @@ class ApiStatusListener<B extends BlocBase<S>, S extends ApiState>
           Future.microtask(() {
             AppDialogs.showMessage(
               context: rootContext,
-              title: 'Error',
+              title: AppStrings.error,
               message: state.errorMessage ?? 'Something went wrong',
-              positiveButton: 'Okay',
+              positiveButton: AppStrings.okay,
               icon: Icons.error_outline_rounded,
               iconColor: Colors.red,
             );
@@ -53,16 +55,16 @@ class ApiStatusListener<B extends BlocBase<S>, S extends ApiState>
           AppDialogs.hideLoading(rootContext);
 
           if (autoPopOnSuccess && Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
+            AppNav.pop(context);
           }
 
           if (showSuccessDialog) {
             Future.microtask(() {
               AppDialogs.showMessage(
                 context: rootContext,
-                title: 'Success',
-                message: successMessage ?? 'Operation completed successfully',
-                positiveButton: 'Submit',
+                title: AppStrings.success,
+                message: successMessage ?? AppStrings.operationCompletedSuccess,
+                positiveButton: AppStrings.submit,
                 icon: Icons.check_circle_outline_rounded,
                 iconColor: Colors.green,
               );

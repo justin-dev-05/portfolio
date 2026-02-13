@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
 import 'package:pdi_dost/core/widgets/app_text_field.dart';
 import 'package:pdi_dost/core/widgets/common_scaffold.dart';
 import 'package:pdi_dost/core/widgets/form_validation_helper.dart';
-import 'package:pdi_dost/features/auth/ui/otp_verification_screen.dart';
-import '../bloc/auth_bloc.dart';
+import 'package:pdi_dost/features/auth/ui/otp/otp_verification_screen.dart';
+import '../../bloc/auth/auth_bloc.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -44,12 +46,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is OTPSent) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => OTPVerificationScreen(email: state.email),
-              ),
-            );
+            AppNav.push(context, OTPVerificationScreen(email: state.email));
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -74,7 +71,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [
                         SizedBox(height: 20.h),
                         Text(
-                          'Forgot Password?',
+                          AppStrings.forgotPassword,
                           style: Theme.of(context).textTheme.displaySmall
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -83,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                         SizedBox(height: 10.h),
                         Text(
-                          'Don\'t worry! It happens. Enter your email address and we\'ll send you a verification code to reset your password.',
+                          AppStrings.forgotPasswordSubtitle,
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: Colors.grey.shade600,
@@ -97,17 +94,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   // Email Field
                   FadeInLeft(
                     child: AppField(
-                      label: 'Email Address',
+                      label: AppStrings.emailAddress,
                       controller: _email.text,
                       focusNode: _email.focus,
-                      hint: 'Enter your registered email',
+                      hint: AppStrings.emailHintRegistered,
                       isRequired: true,
                       prefix: const Icon(Icons.email_outlined),
                       keyboardType: TextInputType.emailAddress,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: FormValidators.email,
                       onChanged: (_) => _validateForm(),
-                      helperText: 'We\'ll send OTP to this email address',
+                      helperText: AppStrings.sendOTPHelper,
                     ),
                   ),
                   SizedBox(height: 40.h),
@@ -117,8 +114,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child: BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
                         return AppButton(
-                          text: 'Send OTP',
-                          icon: Icons.send_rounded,
+                          text: AppStrings.sendOTP,
+                          // icon: Icons.send_rounded,
                           isEnabled: _isFormValid && state is! AuthLoading,
                           isLoading: state is AuthLoading,
                           onPressed: _onSendOTP,
@@ -136,13 +133,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Remember your password?',
+                            AppStrings.rememberPassword,
                             style: TextStyle(fontSize: 14.sp),
                           ),
                           TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => AppNav.pop(context),
                             child: Text(
-                              'Login',
+                              AppStrings.login,
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,

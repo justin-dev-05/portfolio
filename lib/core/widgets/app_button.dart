@@ -146,7 +146,7 @@ class AppOutlinedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    // final isDark = theme.brightness == Brightness.dark;
 
     final effectiveEnabled = isEnabled && onPressed != null;
     final effectiveBorderColor = effectiveEnabled

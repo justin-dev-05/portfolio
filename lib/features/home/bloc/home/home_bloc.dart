@@ -1,41 +1,11 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../data/models/inspection_model.dart';
+import '../../data/models/inspection_model.dart';
+import 'home_event.dart';
+import 'home_state.dart';
 
-// Events
-abstract class HomeEvent extends Equatable {
-  const HomeEvent();
-  @override
-  List<Object?> get props => [];
-}
+export 'home_event.dart';
+export 'home_state.dart';
 
-class FetchHomeData extends HomeEvent {}
-
-class LoadMoreInspections extends HomeEvent {}
-
-// States
-abstract class HomeState extends Equatable {
-  const HomeState();
-  @override
-  List<Object?> get props => [];
-}
-
-class HomeInitial extends HomeState {}
-
-class HomeLoading extends HomeState {}
-
-class HomeLoaded extends HomeState {
-  final List<InspectionModel> inspections;
-  const HomeLoaded(this.inspections);
-  @override
-  List<Object?> get props => [inspections];
-}
-
-class HomePaginationLoading extends HomeLoaded {
-  const HomePaginationLoading(super.inspections);
-}
-
-// Bloc
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<FetchHomeData>((event, emit) async {

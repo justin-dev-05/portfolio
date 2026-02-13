@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../data/models/inspection_model.dart';
+import 'package:pdi_dost/features/home/data/models/inspection_model.dart';
 
 class InspectionListItem extends StatelessWidget {
   final InspectionModel inspection;
@@ -94,9 +94,15 @@ class InspectionListItem extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 12.h),
-                      _buildInfoRow(Icons.person_outline, inspection.customerName),
+                      _buildInfoRow(
+                        Icons.person_outline,
+                        inspection.customerName,
+                      ),
                       SizedBox(height: 4.h),
-                      _buildInfoRow(Icons.location_on_outlined, inspection.address),
+                      _buildInfoRow(
+                        Icons.location_on_outlined,
+                        inspection.address,
+                      ),
                       SizedBox(height: 4.h),
                       _buildInfoRow(
                         Icons.calendar_month_outlined,
@@ -131,8 +137,10 @@ class InspectionListItem extends StatelessWidget {
           Container(
             height: 4.h,
             width: 4.w,
-            decoration:
-                const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+              color: Colors.grey,
+              shape: BoxShape.circle,
+            ),
           ),
           SizedBox(width: 8.w),
           Icon(Icons.phone_outlined, size: 14.sp, color: Colors.grey),

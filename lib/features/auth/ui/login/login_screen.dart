@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
+import 'package:pdi_dost/core/constants/assets_constant.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
 import 'package:pdi_dost/core/widgets/app_text_field.dart';
 import 'package:pdi_dost/core/widgets/common_scaffold.dart';
 import 'package:pdi_dost/core/widgets/form_validation_helper.dart';
+import 'package:pdi_dost/features/auth/ui/forgot_password/forgot_password_screen.dart';
 import 'package:pdi_dost/features/dashboard/ui/dashboard_screen.dart';
-import '../bloc/auth_bloc.dart';
+import 'package:pdi_dost/features/auth/controller/login_controller.dart';
+import '../../bloc/auth/auth_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,39 +22,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _email = FieldController();
-  final _password = FieldController();
-  final _formKey = GlobalKey<FormState>();
-  bool _isFormValid = false;
+  late LoginController _controller;
 
-  void _validateForm() {
-    final isEmailValid = FormValidators.email(_email.text.text.trim()) == null;
-    final isPasswordValid = _password.text.text.trim().isNotEmpty;
-
-    final isValid = isEmailValid && isPasswordValid;
-
-    if (isValid != _isFormValid) {
-      setState(() => _isFormValid = isValid);
-    }
+  @override
+  void initState() {
+    super.initState();
+    _controller = LoginController(authBloc: context.read<AuthBloc>());
   }
 
-  void _onLogin() {
-    // if (_formKey.currentState!.validate()) {
-    context.read<AuthBloc>().add(
-      LoginSubmitted(_email.text.text.trim(), _password.text.text.trim()),
-    );
-    // }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
+      showAppBar: false,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const DashboardScreen()),
-          );
+          AppNav.replace(context, const DashboardScreen());
           // if (state is AuthAuthenticated) {
           //   Navigator.pushReplacement(
           //     context,
@@ -66,12 +57,11 @@ class _LoginScreenState extends State<LoginScreen> {
           //   );
           // }
         },
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(left: 30.r, right: 30.r),
-          child: SafeArea(
-            top: false,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(left: 30.r, right: 30.r),
             child: Form(
-              key: _formKey,
+              key: _controller.formKey,
               child: Column(
                 crossAxisAlignment: .center,
                 mainAxisAlignment: .center,
@@ -80,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: FadeInDown(
                       child: Image.asset(
-                        "assets/images/app_logo.png",
+                        AppAssets.appLogo,
                         height: 120.h,
                         width: 120.h,
                         fit: BoxFit.contain,
@@ -112,14 +102,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   FadeInLeft(
                     child: AppField(
                       label: AppStrings.emailAddress,
-                      controller: _email.text,
-                      focusNode: _email.focus,
+                      controller: _controller.email.text,
+                      focusNode: _controller.email.focus,
                       hint: AppStrings.emailHint,
                       isRequired: true,
                       prefix: const Icon(Icons.email_outlined),
                       keyboardType: TextInputType.emailAddress,
                       validator: FormValidators.email,
-                      onChanged: (_) => _validateForm(),
+                      onChanged: (_) => _controller.validateForm(),
                     ),
                   ),
                   SizedBox(height: 20.h),
@@ -127,8 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   FadeInLeft(
                     child: AppField(
                       label: AppStrings.password,
-                      controller: _password.text,
-                      focusNode: _password.focus,
+                      controller: _controller.password.text,
+                      focusNode: _controller.password.focus,
                       hint: AppStrings.passwordHint,
                       isRequired: true,
                       variant: FieldVariant.password,
@@ -136,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (v) => (v == null || v.isEmpty)
                           ? ValidationStrings.passwordRequired
                           : null,
-                      onChanged: (_) => _validateForm(),
+                      onChanged: (_) => _controller.validateForm(),
                     ),
                   ),
                   SizedBox(height: 10.h),
@@ -145,20 +135,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     alignment: Alignment.centerRight,
                     child: AppTextButton(
                       text: AppStrings.forgotPassword,
-                      onPressed: () {},
+                      onPressed: () {
+                        AppNav.push(context, const ForgotPasswordScreen());
+                      },
                     ),
                   ),
                   SizedBox(height: 30.h),
                   // Login Button
                   FadeInUp(
-                    child: BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        return AppButton(
-                          text: AppStrings.login,
-                          // isEnabled: _isFormValid && state is! AuthLoading,
-                          isEnabled: true,
-                          isLoading: state is AuthLoading,
-                          onPressed: _onLogin,
+                    child: ListenableBuilder(
+                      listenable: _controller,
+                      builder: (context, _) {
+                        return BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                            return AppButton(
+                              text: AppStrings.login,
+                              isEnabled: _controller.isFormValid,
+                              isLoading: state is AuthLoading,
+                              onPressed: _controller.onSubmit,
+                            );
+                          },
                         );
                       },
                     ),
@@ -182,10 +178,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _email.dispose();
-    _password.dispose();
-    super.dispose();
-  }
+
 }

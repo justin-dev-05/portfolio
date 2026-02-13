@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
 
 class NoInternetWidget extends StatelessWidget {
   final VoidCallback onRetry;
@@ -49,7 +50,7 @@ class NoInternetWidget extends StatelessWidget {
             SizedBox(height: 40.h),
             FadeInUp(
               child: Text(
-                'Ooops!',
+                AppStrings.oops,
                 style: TextStyle(
                   fontSize: 34.sp,
                   fontWeight: FontWeight.bold,
@@ -61,7 +62,7 @@ class NoInternetWidget extends StatelessWidget {
             FadeInUp(
               delay: const Duration(milliseconds: 200),
               child: Text(
-                'No Internet Connection found\nCheck your connection',
+                '${AppStrings.noInternetTitle}\n${AppStrings.checkConnection}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16.sp,
@@ -87,7 +88,7 @@ class NoInternetWidget extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Try Again',
+                    AppStrings.tryAgain,
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,

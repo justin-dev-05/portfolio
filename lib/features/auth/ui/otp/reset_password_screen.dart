@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/utils/app_snackbar.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
-import 'package:pdi_dost/core/widgets/app_dialog.dart';
+import 'package:pdi_dost/core/widgets/app_dialogs.dart';
 import 'package:pdi_dost/core/widgets/app_text_field.dart';
 import 'package:pdi_dost/core/widgets/common_scaffold.dart';
 import 'package:pdi_dost/core/widgets/form_validation_helper.dart';
-import 'package:pdi_dost/features/auth/ui/login_screen.dart';
-import '../bloc/auth_bloc.dart';
+import 'package:pdi_dost/features/auth/ui/login/login_screen.dart';
+import '../../bloc/auth/auth_bloc.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -58,19 +60,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           if (state is PasswordReset) {
             AppDialogs.showMessage(
               context: context,
-              title: 'Password Reset Successful!',
-              message:
-                  'Your password has been successfully reset. You can now login with your new password.',
-              positiveButton: 'Go to Login',
+              title: AppStrings.passwordResetSuccessful,
+              message: AppStrings.passwordResetMsg,
+              positiveButton: AppStrings.goToLogin,
               icon: Icons.check_circle_outline_rounded,
               iconColor: Colors.green,
               callback: () {
-                Navigator.of(context).pop(); // Close dialog
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                  (route) => false,
-                );
+                AppNav.pop(context); // Close dialog
+                AppNav.pushAndRemoveUntil(context, const LoginScreen());
               },
             );
           } else if (state is AuthFailure) {
@@ -94,7 +91,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   //   ),
                   // ),
                   // SizedBox(height: 20.h),
-
                   // Header
                   FadeInDown(
                     child: Column(
@@ -128,7 +124,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         // ),
                         // SizedBox(height: 20.h),
                         Text(
-                          'Create New Password',
+                          AppStrings.createNewPassword,
                           style: Theme.of(context).textTheme.displaySmall
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -137,7 +133,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         ),
                         SizedBox(height: 10.h),
                         Text(
-                          'Your new password must be different from previous used passwords.',
+                          AppStrings.createNewPasswordSubtitle,
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: Colors.grey.shade600,
@@ -215,10 +211,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   FadeInLeft(
                     delay: const Duration(milliseconds: 200),
                     child: AppField(
-                      label: 'New Password',
+                      label: AppStrings.newPassword,
                       controller: _password.text,
                       focusNode: _password.focus,
-                      hint: 'Enter your new password',
+                      hint: AppStrings.newPasswordHint,
                       isRequired: true,
                       variant: FieldVariant.password,
                       prefix: const Icon(Icons.lock_outline_rounded),
@@ -226,7 +222,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       validator: (v) =>
                           FormValidators.password(v, minLength: 6),
                       onChanged: (_) => _validateForm(),
-                      helperText: 'Minimum 6 characters',
+                      helperText: AppStrings.min6Chars,
                     ),
                   ),
                   SizedBox(height: 20.h),
@@ -235,10 +231,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   FadeInLeft(
                     delay: const Duration(milliseconds: 300),
                     child: AppField(
-                      label: 'Confirm New Password',
+                      label: AppStrings.confirmNewPassword,
                       controller: _confirmPassword.text,
                       focusNode: _confirmPassword.focus,
-                      hint: 'Confirm your new password',
+                      hint: AppStrings.confirmNewPasswordHint,
                       isRequired: true,
                       variant: FieldVariant.password,
                       prefix: const Icon(Icons.lock_outline_rounded),
@@ -246,7 +242,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       validator: (v) =>
                           FormValidators.passwordMatch(v, _password.text.text),
                       onChanged: (_) => _validateForm(),
-                      helperText: 'Must match the new password',
+                      helperText: AppStrings.mustMatchPassword,
                     ),
                   ),
                   SizedBox(height: 40.h),
@@ -257,7 +253,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     child: BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
                         return AppButton(
-                          text: 'Reset Password',
+                          text: AppStrings.resetPassword,
                           icon: Icons.lock_reset_rounded,
                           isEnabled: _isFormValid && state is! AuthLoading,
                           isLoading: state is AuthLoading,
@@ -274,17 +270,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       delay: const Duration(milliseconds: 500),
                       child: TextButton.icon(
                         onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const LoginScreen(),
-                            ),
-                            (route) => false,
-                          );
+                          AppNav.pushAndRemoveUntil(context, const LoginScreen());
                         },
                         icon: const Icon(Icons.arrow_back_rounded, size: 16),
                         label: Text(
-                          'Back to Login',
+                          AppStrings.backToLogin,
                           style: TextStyle(
                             fontSize: 14.sp,
                             color: Theme.of(context).primaryColor,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'shimmer_item.dart';
 
 class ApiLoadingWidget extends StatelessWidget {
@@ -12,7 +12,11 @@ class ApiLoadingWidget extends StatelessWidget {
     return Column(
       children: [
         SizedBox(height: 20.h),
-        SpinKitWave(color: Colors.blueAccent, size: 30.r),
+        LoadingAnimationWidget.staggeredDotsWave(
+          color: Colors.white,
+          size: 200,
+        ),
+        // SpinKitWave(color: Colors.blueAccent, size: 30.r),
         SizedBox(height: 20.h),
         Expanded(
           child: Padding(

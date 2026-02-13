@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdi_dost/core/network/network_cubit.dart';
@@ -6,10 +7,10 @@ import 'package:pdi_dost/core/theme/app_theme.dart';
 import 'package:pdi_dost/core/theme/theme_bloc.dart';
 import 'package:pdi_dost/core/utils/screen_utils.dart';
 import 'package:pdi_dost/dependency/init_dependencies.dart';
-import 'package:pdi_dost/features/auth/bloc/auth_bloc.dart';
-import 'package:pdi_dost/features/dashboard/bloc/bottom_nav_bloc.dart';
-import 'package:pdi_dost/features/dashboard/bloc/splash_bloc.dart';
-import 'package:pdi_dost/features/home/bloc/home_bloc.dart';
+import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
+import 'package:pdi_dost/features/dashboard/bloc/bottom_nav/bottom_nav_bloc.dart';
+import 'package:pdi_dost/features/dashboard/bloc/splash/splash_bloc.dart';
+import 'package:pdi_dost/features/home/bloc/home/home_bloc.dart';
 import 'package:pdi_dost/features/dashboard/ui/splash_screen.dart';
 import 'core/constants/app_strings.dart';
 
@@ -30,28 +31,36 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => serviceLocator<NetworkCubit>()),
-            BlocProvider(create: (_) => serviceLocator<SplashBloc>()),
-            BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
-            BlocProvider(create: (_) => serviceLocator<BottomNavBloc>()),
-            BlocProvider(create: (_) => serviceLocator<HomeBloc>()),
-            BlocProvider(
-              create: (_) => serviceLocator<ThemeBloc>()..add(LoadThemeEvent()),
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => serviceLocator<NetworkCubit>()),
+              BlocProvider(create: (_) => serviceLocator<SplashBloc>()),
+              BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
+              BlocProvider(create: (_) => serviceLocator<BottomNavBloc>()),
+              BlocProvider(create: (_) => serviceLocator<HomeBloc>()),
+              BlocProvider(
+                create: (_) =>
+                    serviceLocator<ThemeBloc>()..add(LoadThemeEvent()),
+              ),
+            ],
+            child: BlocBuilder<ThemeBloc, ThemeState>(
+              builder: (context, themeState) {
+                return MaterialApp(
+                  title: AppStrings.appName,
+                  debugShowCheckedModeBanner: false,
+                  theme: AppTheme.lightTheme,
+                  darkTheme: AppTheme.darkTheme,
+                  themeMode: themeState.themeMode,
+                  home: child,
+                );
+              },
             ),
-          ],
-          child: BlocBuilder<ThemeBloc, ThemeState>(
-            builder: (context, themeState) {
-              return MaterialApp(
-                title: AppStrings.appName,
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: themeState.themeMode,
-                home: child,
-              );
-            },
           ),
         );
       },

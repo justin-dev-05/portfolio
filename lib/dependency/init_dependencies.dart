@@ -3,11 +3,11 @@ import 'package:http/http.dart' as http;
 import 'package:pdi_dost/core/network/http_client.dart';
 import 'package:pdi_dost/core/network/network_cubit.dart';
 import 'package:pdi_dost/core/theme/theme_bloc.dart';
-import 'package:pdi_dost/features/auth/bloc/auth_bloc.dart';
-import 'package:pdi_dost/features/auth/bloc/onboarding_bloc.dart';
-import 'package:pdi_dost/features/dashboard/bloc/bottom_nav_bloc.dart';
-import 'package:pdi_dost/features/dashboard/bloc/splash_bloc.dart';
-import 'package:pdi_dost/features/home/bloc/home_bloc.dart';
+import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
+import 'package:pdi_dost/features/auth/bloc/onboarding/onboarding_bloc.dart';
+import 'package:pdi_dost/features/dashboard/bloc/bottom_nav/bottom_nav_bloc.dart';
+import 'package:pdi_dost/features/dashboard/bloc/splash/splash_bloc.dart';
+import 'package:pdi_dost/features/home/bloc/home/home_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final serviceLocator = GetIt.instance;

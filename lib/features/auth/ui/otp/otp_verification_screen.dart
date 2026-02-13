@@ -5,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
 import 'package:pdi_dost/core/widgets/common_scaffold.dart';
-import 'package:pdi_dost/features/auth/ui/reset_password_screen.dart';
+import 'package:pdi_dost/features/auth/ui/otp/reset_password_screen.dart';
 import 'package:pinput/pinput.dart';
-import '../bloc/auth_bloc.dart';
+import '../../bloc/auth/auth_bloc.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
   final String email;
@@ -88,7 +90,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen>
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('OTP sent successfully'),
+        content: const Text(AppStrings.otpSentSuccess),
         backgroundColor: AppColors.success,
         behavior: SnackBarBehavior.floating,
       ),
@@ -107,10 +109,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen>
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is OTPVerified) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
-            );
+            AppNav.replace(context, const ResetPasswordScreen());
           } else if (state is AuthFailure) {
             _otpController.clear();
             _otpFocusNode.requestFocus();
@@ -176,7 +175,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen>
                     child: Column(
                       children: [
                         Text(
-                          'Verify Your Email',
+                          AppStrings.verifyEmail,
                           style: Theme.of(context).textTheme.displaySmall
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -185,7 +184,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen>
                         ),
                         SizedBox(height: 12.h),
                         Text(
-                          'We\'ve sent a 4-digit verification code to\n${widget.email}',
+                          '${AppStrings.otpVerificationSubtitle}\n${widget.email}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16.sp,
@@ -287,8 +286,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen>
                             SizedBox(width: 8.w),
                             Text(
                               _canResend
-                                  ? 'Didn\'t receive the code?'
-                                  : 'Resend code in ${_formatTime(_remainingSeconds)}',
+                                  ? AppStrings.didntReceiveCode
+                                  : '${AppStrings.resendCodeIn} ${_formatTime(_remainingSeconds)}',
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: _canResend
@@ -301,7 +300,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen>
                         SizedBox(height: 12.h),
                         if (_canResend)
                           AppOutlinedButton(
-                            text: 'Resend OTP',
+                            text: AppStrings.resendOTPString,
                             icon: Icons.refresh_rounded,
                             onPressed: _resendOTP,
                           ),
@@ -319,7 +318,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen>
                         final isFilled = _otpController.text.length == 4;
 
                         return AppButton(
-                          text: 'Verify OTP',
+                          text: AppStrings.verifyOTP,
                           icon: Icons.check_circle_rounded,
                           isEnabled: isFilled && state is! AuthLoading,
                           isLoading: state is AuthLoading,

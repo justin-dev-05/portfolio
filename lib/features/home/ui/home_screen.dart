@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
-import 'package:pdi_dost/features/auth/bloc/auth_bloc.dart';
-import 'package:pdi_dost/features/dashboard/bloc/bottom_nav_bloc.dart';
-import '../bloc/home_bloc.dart';
-import '../widgets/inspection_list_item.dart';
+import 'package:pdi_dost/core/widgets/common_scaffold.dart';
+import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
+import 'package:pdi_dost/features/dashboard/bloc/bottom_nav/bottom_nav_bloc.dart';
+import '../bloc/home/home_bloc.dart';
+import 'widgets/inspection_list_item.dart';
+import 'package:pdi_dost/core/widgets/toolbar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,81 +41,79 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(),
-            Expanded(
-              child: BlocBuilder<HomeBloc, HomeState>(
-                builder: (context, state) {
-                  if (state is HomeLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+    return CommonScaffold(
+      showAppBar: false,
+      body: Column(
+        children: [
+          _buildHeader(),
+          Expanded(
+            child: BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                if (state is HomeLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                  if (state is HomeLoaded) {
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        context.read<HomeBloc>().add(FetchHomeData());
-                      },
-                      child: CustomScrollView(
-                        controller: _scrollController,
-                        slivers: [
-                          SliverToBoxAdapter(child: _buildSummaryCards()),
-                          SliverPadding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 8.h,
-                            ),
-                            sliver: SliverToBoxAdapter(
-                              child: Text(
-                                AppStrings.recentInspections,
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.5,
-                                ),
+                if (state is HomeLoaded) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<HomeBloc>().add(FetchHomeData());
+                    },
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      slivers: [
+                        SliverToBoxAdapter(child: _buildSummaryCards()),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 8.h,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: Text(
+                              AppStrings.recentInspections,
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ),
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                if (index < state.inspections.length) {
-                                  return InspectionListItem(
-                                    inspection: state.inspections[index],
-                                  );
-                                } else {
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 20.h,
-                                    ),
-                                    child: const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                }
-                              },
-                              childCount:
-                                  state.inspections.length +
-                                  (state is HomePaginationLoading ? 1 : 0),
-                            ),
+                        ),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              if (index < state.inspections.length) {
+                                return InspectionListItem(
+                                  inspection: state.inspections[index],
+                                );
+                              } else {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              }
+                            },
+                            childCount:
+                                state.inspections.length +
+                                (state is HomePaginationLoading ? 1 : 0),
                           ),
-                          SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-                        ],
-                      ),
-                    );
-                  }
+                        ),
+                        SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                      ],
+                    ),
+                  );
+                }
 
-                  return const SizedBox();
-                },
-              ),
+                return const SizedBox();
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
 
   Widget _buildHeader() {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -123,124 +123,19 @@ class _HomeScreenState extends State<HomeScreen> {
           name = state.username.isNotEmpty ? state.username : "User Name";
         }
 
-        return Padding(
-          padding: EdgeInsets.all(16.r),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            context.read<BottomNavBloc>().add(
-                              const TabChangedEvent(3),
-                            );
-                          },
-                          child: CircleAvatar(
-                            radius: 24.r,
-                            backgroundColor: Theme.of(
-                              context,
-                            ).primaryColor.withValues(alpha: 0.1),
-                            child: Icon(
-                              Icons.person,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppStrings.welcome,
-                                style: TextStyle(
-                                  fontSize: 13.sp,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              Text(
-                                name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10.r),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    child: Badge(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      label: const Text("3"),
-                      child: Icon(
-                        Icons.notifications_none_rounded,
-                        size: 24.sp,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                height: 50.h,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.03),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search, color: Colors.grey[400], size: 20.sp),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: AppStrings.searchInspections,
-                          hintStyle: TextStyle(
-                            color: Colors.grey[400],
-                            fontSize: 14.sp,
-                          ),
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          filled: false,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        return Toolbar.homeHeader(
+          context,
+          name: name,
+          notificationCount: 3, // Hardcoded for now as per previous code
+          onProfileTap: () {
+            context.read<BottomNavBloc>().add(const TabChangedEvent(3));
+          },
+          onNotificationTap: () {
+            // TODO: Implement notification tap
+          },
+          onSearchChanged: (value) {
+            // TODO: Implement search
+          },
         );
       },
     );
@@ -248,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSummaryCards() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
       child: Row(
         children: [
           _summaryCard(
