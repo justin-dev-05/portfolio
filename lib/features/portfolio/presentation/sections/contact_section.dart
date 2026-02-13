@@ -105,7 +105,7 @@ class _ContactSectionState extends State<ContactSection> {
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: isMobile ? 24.w : 100,
-            vertical: (isMobile ? 30 : 10).h,
+            vertical: (isMobile ? 30 : 30).h,
           ),
           child: Column(
             children: [

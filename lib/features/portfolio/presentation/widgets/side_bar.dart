@@ -17,46 +17,45 @@ class SideBar extends StatelessWidget {
               state.isDark ? AppTheme.backgroundColor : Colors.white,
           child: Column(
             children: [
-              DrawerHeader(
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 40.h),
                 decoration: BoxDecoration(
                   border: Border(
-                      bottom: BorderSide(
-                          color: (state.isDark ? Colors.white : Colors.black)
-                              .withValues(alpha: 0.05))),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 60.w,
-                        height: 60.w,
-                        decoration: const BoxDecoration(
-                          gradient: AppTheme.primaryGradient,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            "JM",
-                            style: GoogleFonts.outfit(
-                              fontSize: 24.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(
-                        "Justin Mahida",
-                        style: GoogleFonts.outfit(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
-                          color: state.isDark ? Colors.white : Colors.black87,
-                        ),
-                      ),
-                    ],
+                    bottom: BorderSide(
+                      color: (state.isDark ? Colors.white : Colors.black)
+                          .withValues(alpha: 0.05),
+                    ),
                   ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 90.w,
+                      height: 90.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.5),
+                          width: 2,
+                        ),
+                        image: const DecorationImage(
+                          image: AssetImage("assets/images/profile.png"),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    Text(
+                      "Justin Mahida",
+                      style: GoogleFonts.outfit(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.bold,
+                        color: state.isDark ? Colors.white : Colors.black87,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const _SideNavItem(

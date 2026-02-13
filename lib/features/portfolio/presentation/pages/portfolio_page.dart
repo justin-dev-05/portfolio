@@ -11,6 +11,7 @@ import '../sections/experience_section.dart';
 import '../sections/contact_section.dart';
 import '../sections/footer_section.dart';
 import '../widgets/nav_bar.dart';
+import '../widgets/profile_contact_card.dart';
 import '../widgets/side_bar.dart';
 import '../widgets/scroll_to_top_button.dart';
 
@@ -101,20 +102,27 @@ class _PortfolioPageState extends State<PortfolioPage> {
       child: Scaffold(
         appBar: const NavBar(),
         drawer: const SideBar(),
-        body: Container(
-          color: Theme.of(context).colorScheme.surface,
-          child: ScrollablePositionedList.builder(
-            itemCount: _sections.length,
-            itemScrollController: _itemScrollController,
-            itemPositionsListener: _itemPositionsListener,
-            itemBuilder: (context, index) {
-              return VisibilityDetector(
-                key: Key('section-$index'),
-                onVisibilityChanged: (info) {},
-                child: _sections[index],
-              );
-            },
-          ),
+        body: Column(
+          children: [
+            const ProfileContactCard(),
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.surface,
+                child: ScrollablePositionedList.builder(
+                  itemCount: _sections.length,
+                  itemScrollController: _itemScrollController,
+                  itemPositionsListener: _itemPositionsListener,
+                  itemBuilder: (context, index) {
+                    return VisibilityDetector(
+                      key: Key('section-$index'),
+                      onVisibilityChanged: (info) {},
+                      child: _sections[index],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
         floatingActionButton: const ScrollToTopButton(),
       ),

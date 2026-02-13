@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
             splitScreenMode: true,
             builder: (context, child) {
               return MaterialApp.router(
-                title: 'Justin Mahida | Portfolio',
+                title: 'Portfolio',
                 debugShowCheckedModeBanner: false,
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
@@ -43,39 +43,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-//  return BlocProvider(
-//       create: (context) => PortfolioBloc(),
-//       child: LayoutBuilder(
-//         builder: (context, constraints) {
-//           final designSize = DesignSize.resolve(constraints.maxWidth);
-//           return BlocListener<PortfolioBloc, PortfolioState>(
-//             listener: (context, state) {
-//               SystemChrome.setSystemUIOverlayStyle(
-//                 SystemUiOverlayStyle(
-//                   statusBarColor: Colors.transparent,
-//                   statusBarIconBrightness:
-//                       state.isDark ? Brightness.light : Brightness.dark,
-//                   statusBarBrightness:
-//                       state.isDark ? Brightness.dark : Brightness.light,
-//                 ),
-//               );
-//             },
-//             child: ScreenUtilInit(
-//               designSize: designSize,
-//               minTextAdapt: true,
-//               splitScreenMode: true,
-//               builder: (context, child) {
-//                 return MaterialApp.router(
-//                   title: 'Justin Mahida | Portfolio',
-//                   debugShowCheckedModeBanner: false,
-//                   theme: AppTheme.lightTheme,
-//                   darkTheme: AppTheme.darkTheme,
-//                   themeMode: ThemeMode.system,
-//                   routerConfig: AppRouter.router,
-//                 );
-//               },
-//             ),
-//           );
-//         },
-//       ),
-//     );

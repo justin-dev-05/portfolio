@@ -25,6 +25,8 @@ class ScrollToSectionRequested extends PortfolioEvent {
   List<Object?> get props => [index];
 }
 
+class ToggleProfileCard extends PortfolioEvent {}
+
 class ResetAutoScroll extends PortfolioEvent {}
 
 class PortfolioState extends Equatable {
@@ -32,12 +34,14 @@ class PortfolioState extends Equatable {
   final int scrollToSectionIndex; // -1 if no scroll requested
   final bool isDark;
   final bool isAutoScrolling;
+  final bool showProfileCard;
 
   const PortfolioState({
     this.activeIndex = 0,
     this.scrollToSectionIndex = -1,
     this.isDark = true,
     this.isAutoScrolling = false,
+    this.showProfileCard = false,
   });
 
   PortfolioState copyWith({
@@ -45,18 +49,25 @@ class PortfolioState extends Equatable {
     int? scrollToSectionIndex,
     bool? isDark,
     bool? isAutoScrolling,
+    bool? showProfileCard,
   }) {
     return PortfolioState(
       activeIndex: activeIndex ?? this.activeIndex,
       scrollToSectionIndex: scrollToSectionIndex ?? this.scrollToSectionIndex,
       isDark: isDark ?? this.isDark,
       isAutoScrolling: isAutoScrolling ?? this.isAutoScrolling,
+      showProfileCard: showProfileCard ?? this.showProfileCard,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [activeIndex, scrollToSectionIndex, isDark, isAutoScrolling];
+  List<Object?> get props => [
+        activeIndex,
+        scrollToSectionIndex,
+        isDark,
+        isAutoScrolling,
+        showProfileCard
+      ];
 }
 
 class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
@@ -84,6 +95,10 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
 
     on<ToggleThemeRequested>((event, emit) {
       emit(state.copyWith(isDark: !state.isDark));
+    });
+
+    on<ToggleProfileCard>((event, emit) {
+      emit(state.copyWith(showProfileCard: !state.showProfileCard));
     });
   }
 }

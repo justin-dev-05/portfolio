@@ -13,7 +13,9 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Responsive.isDesktop(context);
     final isMobile = Responsive.isMobile(context);
+
     return BlocBuilder<PortfolioBloc, PortfolioState>(
       builder: (context, state) {
         return SafeArea(
@@ -45,71 +47,75 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
                 padding: EdgeInsets.symmetric(horizontal: isMobile ? 15.w : 40),
                 child: Row(
                   children: [
-                    // Profile Circle & Name
-                    Row(
-                      children: [
-                        Container(
-                          width: 40.w,
-                          height: 40.w,
-                          decoration: const BoxDecoration(
-                            gradient: AppTheme.primaryGradient,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "JM",
-                              style: GoogleFonts.outfit(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        ShaderMask(
-                          shaderCallback: (bounds) =>
-                              AppTheme.primaryGradient.createShader(bounds),
-                          child: Text(
-                            "Justin Mahida",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.outfit(
-                              fontSize: (isMobile ? 21 : 21).sp,
-                              fontWeight: FontWeight.bold,
-                              height: 1.1,
-                              letterSpacing: 1.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    const Spacer(),
-                    if (!isMobile)
-                      Row(
+                    // Left: Actions (Desktop: Empty | Tablet/Mobile: Hamburger)
+                    Expanded(
+                      flex: isDesktop ? 1 : 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const _NavItem(title: "Home", index: 0),
-                          const _NavItem(title: "Projects", index: 1),
-                          const _NavItem(title: "Skills", index: 2),
-                          const _NavItem(title: "Experience", index: 3),
-                          const _NavItem(title: "Contact", index: 4),
-                          SizedBox(width: 24.w),
-                          _ThemeToggle(),
-                        ],
-                      )
-                    else
-                      Row(
-                        children: [
-                          _ThemeToggle(),
-                          SizedBox(width: 10.w),
-                          IconButton(
-                            icon: FaIcon(FontAwesomeIcons.bars, size: 20.sp),
-                            color:
-                                state.isDark ? Colors.white70 : Colors.black54,
-                            onPressed: () => Scaffold.of(context).openDrawer(),
-                          ),
+                          if (!isDesktop)
+                            IconButton(
+                              icon: FaIcon(FontAwesomeIcons.bars, size: 20.sp),
+                              color: state.isDark
+                                  ? Colors.white70
+                                  : Colors.black54,
+                              onPressed: () =>
+                                  Scaffold.of(context).openDrawer(),
+                            )
+                          else
+                            const SizedBox.shrink(),
                         ],
                       ),
+                    ),
+
+                    // Center: Menu (Desktop) or Name (Tablet/Mobile)
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: !isDesktop
+                            ? ShaderMask(
+                                shaderCallback: (bounds) => AppTheme
+                                    .primaryGradient
+                                    .createShader(bounds),
+                                child: Text(
+                                  "Justin Mahida",
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.outfit(
+                                    fontSize: isMobile ? 20.sp : 24.sp,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.1,
+                                    letterSpacing: 1.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            : const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _NavItem(title: "Home", index: 0),
+                                  _NavItem(title: "Projects", index: 1),
+                                  _NavItem(title: "Skills", index: 2),
+                                  _NavItem(title: "Experience", index: 3),
+                                  _NavItem(title: "Contact", index: 4),
+                                ],
+                              ),
+                      ),
+                    ),
+
+                    // Right: Actions
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _ThemeToggle(),
+                          if (isDesktop) ...[
+                            SizedBox(width: 16.w),
+                            const _ProfileToggle(),
+                          ],
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -199,6 +205,52 @@ class _ThemeToggle extends StatelessWidget {
                     : Icons.dark_mode_rounded,
                 size: 20.sp,
                 color: state.isDark ? Colors.white : Colors.black87,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ProfileToggle extends StatelessWidget {
+  const _ProfileToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PortfolioBloc, PortfolioState>(
+      builder: (context, state) {
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () => context.read<PortfolioBloc>().add(ToggleProfileCard()),
+            child: Container(
+              width: 42.w,
+              height: 42.w,
+              decoration: BoxDecoration(
+                color: (state.isDark ? Colors.white : Colors.black)
+                    .withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(
+                  color: state.showProfileCard
+                      ? AppTheme.primaryColor
+                      : Colors.transparent,
+                  width: 2,
+                ),
+              ),
+              child: Center(
+                child: Container(
+                  width: 30.w,
+                  height: 30.w,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/profile.png"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

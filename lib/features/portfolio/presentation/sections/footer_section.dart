@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portfolio/core/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +17,7 @@ class FooterSection extends StatelessWidget {
       builder: (context, state) {
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 40.h),
+          padding: EdgeInsets.symmetric(vertical: 20.h),
           decoration: BoxDecoration(
             color: state.isDark ? AppTheme.backgroundColor : Colors.white,
             border: Border(
@@ -27,23 +28,23 @@ class FooterSection extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                "© ${DateTime.now().year} ${PortfolioConstants.name}. Built with Flutter.",
+                "© ${DateTime.now().year} ${PortfolioConstants.name.toUpperCase()}",
                 style: GoogleFonts.outfit(
                   fontSize: 14.sp,
                   color: state.isDark ? Colors.white54 : Colors.black54,
                 ),
               ),
-              SizedBox(height: 24.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const _SocialIcon(icon: FontAwesomeIcons.linkedin),
-                  SizedBox(width: 24.w),
-                  const _SocialIcon(icon: FontAwesomeIcons.github),
-                  SizedBox(width: 24.w),
-                  const _SocialIcon(icon: FontAwesomeIcons.twitter),
-                ],
-              ),
+              // SizedBox(height: 24.h),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     const _SocialIcon(icon: FontAwesomeIcons.linkedin),
+              //     SizedBox(width: 24.w),
+              //     const _SocialIcon(icon: FontAwesomeIcons.github),
+              //     SizedBox(width: 24.w),
+              //     const _SocialIcon(icon: FontAwesomeIcons.twitter),
+              //   ],
+              // ),
             ],
           ),
         );
