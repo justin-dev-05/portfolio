@@ -87,7 +87,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       isRequired: true,
                       prefix: const Icon(Icons.person_outline),
                       keyboardType: TextInputType.name,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      // autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) => FormValidators.required(
                         value,
                         message: ValidationStrings.nameRequired,
@@ -106,7 +106,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       isRequired: true,
                       prefix: const Icon(Icons.email_outlined),
                       keyboardType: TextInputType.emailAddress,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      // autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: FormValidators.email,
                       onChanged: (_) => _controller.validateForm(),
                       helperText: AppStrings.emailUpdates,
@@ -118,19 +118,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       builder: (context, _) {
                         return AppButton(
                           text: AppStrings.saveChanges,
-                          icon: Icons.check_circle_outline,
+                          // icon: Icons.check_circle_outline,
                           isEnabled: _controller.isFormValid,
                           onPressed: _controller.onSubmit,
                         );
                       },
                     ),
-                    SizedBox(height: 16.h),
-                    // Cancel Button
-                    AppOutlinedButton(
-                      text: AppStrings.cancel,
-                      icon: Icons.close,
-                      onPressed: () => AppNav.pop(context),
-                    ),
+                    // SizedBox(height: 16.h),
+                    // // Cancel Button
+                    // AppOutlinedButton(
+                    //   text: AppStrings.cancel,
+                    //   icon: Icons.close,
+                    //   onPressed: () => AppNav.pop(context),
+                    // ),
                   ],
                 ),
               ),

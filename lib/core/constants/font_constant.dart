@@ -1,4 +1,4 @@
 class AppFonts {
-  static const String poppins = "Poppins";
-  static const String outfit = "Outfit";
+  static const String archivo = "Archivo";
+  static const String geist = "Geist";
 }

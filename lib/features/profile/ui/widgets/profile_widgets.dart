@@ -1,16 +1,24 @@
 import 'dart:io';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
+import 'package:pdi_dost/core/constants/helper.dart';
 import 'package:pdi_dost/core/theme/theme_bloc.dart';
+import 'package:pdi_dost/core/widgets/app_dialogs.dart';
 import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
 
 class ProfileHeader extends StatelessWidget {
   final bool showText;
-  const ProfileHeader({super.key, this.showText = true});
+  final bool isDarkHeader;
+  const ProfileHeader({
+    super.key,
+    this.showText = true,
+    this.isDarkHeader = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +29,9 @@ class ProfileHeader extends StatelessWidget {
         String profileImg = '';
 
         if (state is AuthAuthenticated) {
-          name = state.username.isNotEmpty ? state.username : 'User Name';
+          name = state.username.isNotEmpty
+              ? state.username.capitalize()
+              : 'User Name';
           email = state.email.isNotEmpty ? state.email : 'user@gmail.com';
           profileImg = state.profileImagePath ?? '';
         }
@@ -48,10 +58,10 @@ class ProfileHeader extends StatelessWidget {
                   child: Hero(
                     tag: 'profile_avatar',
                     child: CircleAvatar(
-                      radius: 54.r,
+                      radius: 50.r,
                       backgroundColor: AppColors.white,
                       child: CircleAvatar(
-                        radius: 51.r,
+                        radius: 47.r,
                         backgroundImage: profileImg.isNotEmpty
                             ? (profileImg.startsWith('http')
                                   ? NetworkImage(profileImg)
@@ -66,7 +76,7 @@ class ProfileHeader extends StatelessWidget {
                   bottom: 4.r,
                   right: 4.r,
                   child: GestureDetector(
-                    onTap: () => _showImagePicker(context),
+                    onTap: () => showImagePicker(context),
                     child: Container(
                       padding: EdgeInsets.all(8.r),
                       decoration: BoxDecoration(
@@ -92,26 +102,29 @@ class ProfileHeader extends StatelessWidget {
               ],
             ),
             if (showText) ...[
-              SizedBox(height: 10.h),
+              SizedBox(height: 5.h),
               Text(
                 name,
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
+                  color: isDarkHeader ? Colors.white : null,
                 ),
               ),
               SizedBox(height: 2.h),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha: 0.08),
+                  color: isDarkHeader
+                      ? Colors.white.withValues(alpha: 0.2)
+                      : primaryColor.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
                   email,
                   style: TextStyle(
-                    color: primaryColor,
+                    color: isDarkHeader ? Colors.white : primaryColor,
                     fontWeight: FontWeight.w600,
                     fontSize: 12.sp,
                   ),
@@ -123,111 +136,69 @@ class ProfileHeader extends StatelessWidget {
       },
     );
   }
+}
 
-  void _showImagePicker(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
-      ),
-      builder: (_) {
-        return SafeArea(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(24.w, 12.h, 24.w, 24.h),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Drag Handle
-                Container(
-                  width: 40.w,
-                  height: 4.h,
-                  margin: EdgeInsets.only(bottom: 24.h),
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? Colors.white24
-                        : Colors.grey.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(2.r),
-                  ),
-                ),
-                // Camera Option
-                _buildPickerOption(
-                  context,
-                  title: AppStrings.camera,
-                  icon: Icons.camera_alt_rounded,
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(context, ImageSource.camera);
-                  },
-                ),
-                SizedBox(height: 12.h),
-                // Gallery Option
-                _buildPickerOption(
-                  context,
-                  title: AppStrings.gallery,
-                  icon: Icons.photo_rounded,
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(context, ImageSource.gallery);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildPickerOption(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16.r),
-        child: Padding(
-          padding: EdgeInsets.all(8.r),
-          child: Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(12.r),
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.white10 : const Color(0xFF2B343B),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Icon(icon, color: Colors.white, size: 24.sp),
-              ),
-              SizedBox(width: 20.w),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white : const Color(0xFF2B343B),
-                ),
-              ),
-            ],
-          ),
+Widget buildSectionTitle(String title, BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return Align(
+    alignment: AlignmentGeometry.topLeft,
+    child: Padding(
+      padding: EdgeInsets.only(left: 4.w),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w700,
+          color: isDark ? Colors.white : Colors.black.withValues(alpha: 0.8),
+          letterSpacing: -0.2,
         ),
       ),
-    );
+    ),
+  );
+}
+
+Widget buildSectionCard(
+  BuildContext context, {
+  required List<Widget> children,
+}) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return FadeInUp(
+    child: Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: isDark ? Colors.white.withValues(alpha: 0.04) : Colors.white,
+        borderRadius: BorderRadius.circular(24.r),
+        boxShadow: [
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: Column(children: children),
+      ),
+    ),
+  );
+}
+
+void showImagePicker(BuildContext context) async {
+  final source = await AppDialogs.showImagePickerDialog(context);
+  if (source != null && context.mounted) {
+    _pickImage(context, source);
   }
+}
 
-  Future<void> _pickImage(BuildContext context, ImageSource source) async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(source: source, imageQuality: 70);
+Future<void> _pickImage(BuildContext context, ImageSource source) async {
+  final picker = ImagePicker();
+  final image = await picker.pickImage(source: source, imageQuality: 70);
 
-    if (image != null) {
-      if (context.mounted) {
-        context.read<AuthBloc>().add(UpdateProfileImageRequested(image.path));
-      }
+  if (image != null) {
+    if (context.mounted) {
+      context.read<AuthBloc>().add(UpdateProfileImageRequested(image.path));
     }
   }
 }
@@ -245,7 +216,7 @@ Widget buildSettingsTile({
   return Column(
     children: [
       ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.r),
         ),

@@ -110,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       isRequired: true,
                       prefix: const Icon(Icons.person_outline),
                       keyboardType: TextInputType.name,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      // autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (v) => FormValidators.required(
                         v,
                         message: ValidationStrings.nameRequired,
@@ -131,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       isRequired: true,
                       prefix: const Icon(Icons.email_outlined),
                       keyboardType: TextInputType.emailAddress,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      // autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: FormValidators.email,
                       onChanged: (_) => _validateForm(),
                       helperText: AppStrings.emailUpdates,
@@ -150,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       isRequired: true,
                       variant: FieldVariant.password,
                       prefix: const Icon(Icons.lock_outline_rounded),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      // autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (v) =>
                           FormValidators.password(v, minLength: 6),
                       onChanged: (_) => _validateForm(),

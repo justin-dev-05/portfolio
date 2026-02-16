@@ -13,15 +13,19 @@ class Toolbar {
     bool centerTitle = true,
     bool showBackButton = true,
     VoidCallback? onBackTap,
+    TextStyle? titleStyle,
   }) {
     return AppBar(
       title: Text(
         title,
-        style: TextStyle(
-          fontSize: 20.sp,
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).primaryColor,
-        ),
+        style:
+            titleStyle ??
+            TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              // fontFamily: AppFonts.archivo,
+              color: Theme.of(context).primaryColor,
+            ),
       ),
       centerTitle: centerTitle,
       elevation: 0,
@@ -29,7 +33,7 @@ class Toolbar {
       leading: showBackButton
           ? Center(
               child: Padding(
-                padding: EdgeInsets.only(left: 8.w),
+                padding: EdgeInsets.only(left: 12.w),
                 child: Material(
                   color: Theme.of(context).brightness == Brightness.dark
                       ? Colors.white.withValues(alpha: 0.05)

@@ -64,6 +64,10 @@ class AppButton extends StatelessWidget {
           backgroundColor: effectiveBgColor,
           disabledBackgroundColor: disabledColor ?? Colors.grey.shade400,
           foregroundColor: effectiveTextColor,
+          minimumSize: Size(
+            isFullWidth ? double.infinity : (width ?? 0),
+            height ?? 55.h,
+          ),
           elevation: effectiveEnabled ? 2 : 0,
           shadowColor: effectiveEnabled
               ? AppColors.primaryLight.withValues(alpha: 0.3)
@@ -72,7 +76,7 @@ class AppButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius ?? 16.r),
           ),
           padding:
-              padding ?? EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+              padding ?? EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
         ),
         child: isLoading
             ? SizedBox(
@@ -145,7 +149,7 @@ class AppOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     // final isDark = theme.brightness == Brightness.dark;
 
     final effectiveEnabled = isEnabled && onPressed != null;
@@ -163,6 +167,7 @@ class AppOutlinedButton extends StatelessWidget {
         onPressed: effectiveEnabled ? onPressed : null,
         style: OutlinedButton.styleFrom(
           foregroundColor: effectiveTextColor,
+          minimumSize: Size(isFullWidth ? double.infinity : 0, height ?? 55.h),
           side: BorderSide(color: effectiveBorderColor, width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius ?? 16.r),

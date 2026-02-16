@@ -8,6 +8,7 @@ class AppColors {
   //  static const Color accentLight = Color(0xFF06578E); // Emerald
   static const Color backgroundLight = Color(0xFFF8FAFC);
   static const Color white = Colors.white;
+  static const Color black = Colors.black;
   static const Color textPrimaryLight = Color(0xFF1E293B);
   static const Color textSecondaryLight = Color(0xFF64748B);
   static const Color transparent = Colors.transparent;

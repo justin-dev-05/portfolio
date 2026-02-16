@@ -1,18 +1,18 @@
 import 'dart:ui';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/constants/assets_constant.dart';
 import 'package:pdi_dost/core/constants/helper.dart';
+import 'package:pdi_dost/core/widgets/app_button.dart';
 import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
 
 class AppDialogs {
   static bool _isLoadingOpen = false;
-
   static Future<void> showLoading(
     BuildContext context, {
     bool showLogo = false,
@@ -88,7 +88,7 @@ class AppDialogs {
                       SizedBox(height: 12.h),
                       Text(
                         AppStrings.pleaseWait,
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: isDark
@@ -220,6 +220,143 @@ class AppDialogs {
       },
     );
   }
+
+  static void showConfirmDeleteAccount(BuildContext context) {
+    showMessage(
+      context: context,
+      title: AppStrings.deleteAccount,
+      message: AppStrings.confirmDeleteAccountMsg,
+      positiveButton: AppStrings.deleteAccount,
+      negativeButton: AppStrings.cancel,
+      icon: Icons.delete_forever_rounded,
+      iconColor: AppColors.error,
+      callback: () {
+        // Handle delete account logic here
+        // Usually context.read<AuthBloc>().add(AuthDeleteAccountRequested());
+      },
+    );
+  }
+
+  static Future<ImageSource?> showImagePickerDialog(BuildContext context) {
+    hideLoading(context);
+    return showGeneralDialog<ImageSource>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: AppStrings.close,
+      barrierColor: Colors.black.withValues(
+        alpha: isDarkMode(context) ? 0.5 : 0.6,
+      ),
+      transitionDuration: const Duration(milliseconds: 350),
+      pageBuilder: (context, anim, secondaryAnim) {
+        final isDark = isDarkMode(context);
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: 0.8.sw,
+              padding: EdgeInsets.all(24.r),
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.surfaceDark : AppColors.white,
+                borderRadius: BorderRadius.circular(28.r),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 25.r,
+                    color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.1),
+                    offset: Offset(0, 10.h),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(16.r),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryLight.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.image_search_rounded,
+                      size: 44.sp,
+                      color: AppColors.primaryLight,
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+                  Text(
+                    AppStrings.chooseImage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : AppColors.backgroundDark,
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Text(
+                    AppStrings.selectSourceMsg,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      height: 1.5,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondaryLight,
+                    ),
+                  ),
+                  SizedBox(height: 28.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppOutlinedButton(
+                          text: AppStrings.camera,
+                          height: 48.h,
+                          borderRadius: 14.r,
+                          borderColor:
+                              (isDark ? Colors.white : AppColors.primaryLight)
+                                  .withValues(alpha: 0.2),
+                          textColor: isDark
+                              ? Colors.white70
+                              : AppColors.primaryLight,
+                          onPressed: () =>
+                              Navigator.pop(context, ImageSource.camera),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: AppButton(
+                          text: AppStrings.gallery,
+                          height: 48.h,
+                          borderRadius: 14.r,
+                          backgroundColor: AppColors.primaryLight,
+                          textColor: isDark
+                              ? Colors.white70
+                              : AppColors.textPrimaryDark,
+                          onPressed: () =>
+                              Navigator.pop(context, ImageSource.gallery),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, anim, _, child) {
+        return FadeTransition(
+          opacity: anim,
+          child: SlideTransition(
+            position: Tween<Offset>(begin: Offset(0, 0.2.h), end: Offset.zero)
+                .animate(
+                  CurvedAnimation(parent: anim, curve: Curves.easeOutCubic),
+                ),
+            child: child,
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _AppDialogContent extends StatefulWidget {
@@ -314,7 +451,7 @@ class _AppDialogContentState extends State<_AppDialogContent> {
                   textAlign: widget.isTitleLeft
                       ? TextAlign.left
                       : TextAlign.center,
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : AppColors.backgroundDark,
@@ -327,7 +464,7 @@ class _AppDialogContentState extends State<_AppDialogContent> {
                   textAlign: widget.isTitleLeft
                       ? TextAlign.left
                       : TextAlign.center,
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                     fontSize: 15.sp,
                     height: 1.5,
                     color: isDark
@@ -340,30 +477,17 @@ class _AppDialogContentState extends State<_AppDialogContent> {
                 children: [
                   if ((widget.negativeButton ?? '').isNotEmpty)
                     Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color:
-                                (isDark ? Colors.white : AppColors.primaryLight)
-                                    .withValues(alpha: 0.2),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14.r),
-                          ),
-                          minimumSize: Size.fromHeight(48.h),
-                          padding: EdgeInsets.symmetric(vertical: 14.h),
-                        ),
+                      child: AppOutlinedButton(
+                        text: widget.negativeButton!,
+                        height: 48.h,
+                        borderRadius: 14.r,
+                        borderColor:
+                            (isDark ? Colors.white : AppColors.primaryLight)
+                                .withValues(alpha: 0.2),
+                        textColor: isDark
+                            ? Colors.white70
+                            : AppColors.primaryLight,
                         onPressed: _isPopping ? null : () => _handlePop(),
-                        child: Text(
-                          widget.negativeButton!,
-                          style: GoogleFonts.poppins(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w600,
-                            color: isDark
-                                ? Colors.white70
-                                : AppColors.primaryLight,
-                          ),
-                        ),
                       ),
                     ),
                   if ((widget.negativeButton ?? '').isNotEmpty &&
@@ -371,30 +495,17 @@ class _AppDialogContentState extends State<_AppDialogContent> {
                     SizedBox(width: 12.w),
                   if ((widget.positiveButton ?? '').isNotEmpty)
                     Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size.fromHeight(48.h),
-                          backgroundColor: AppColors.primaryLight,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14.r),
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 14.h),
-                        ),
+                      child: AppButton(
+                        text: widget.positiveButton!,
+                        height: 48.h,
+                        borderRadius: 14.r,
+                        backgroundColor: AppColors.primaryLight,
+                        textColor: isDark
+                            ? Colors.white70
+                            : AppColors.textPrimaryDark,
                         onPressed: _isPopping
                             ? null
                             : () => _handlePop(widget.callback),
-                        child: Text(
-                          widget.positiveButton!,
-                          style: GoogleFonts.poppins(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.bold,
-                            color: isDark
-                                ? Colors.white70
-                                : AppColors.textPrimaryDark,
-                          ),
-                        ),
                       ),
                     ),
                 ],

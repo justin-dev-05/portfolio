@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdi_dost/core/widgets/app_dialogs.dart';
 import 'package:pdi_dost/core/utils/app_nav.dart';
 
-class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatelessWidget {
+class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatefulWidget {
   final Widget child;
 
   /// The Type of the loading state (e.g., AuthLoading)
@@ -56,45 +56,80 @@ class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatelessWidget {
   });
 
   @override
+  State<ApiStateBlocListener<B, S>> createState() =>
+      _ApiStateBlocListenerState<B, S>();
+}
+
+class _ApiStateBlocListenerState<B extends BlocBase<S>, S>
+    extends State<ApiStateBlocListener<B, S>> {
+  bool _iStartedLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<B, S>(
       listener: (context, state) {
         final stateType = state.runtimeType;
+        final isCurrent = ModalRoute.of(context)?.isCurrent ?? true;
 
-        if (stateType == loadingStateType) {
-          AppDialogs.showLoading(context);
-        } else if (stateType == successStateType) {
-          if (autoPopOnSuccess && Navigator.of(context).canPop()) {
+        // This prevents multiple dialogs from background screens.
+        if (!isCurrent && !_iStartedLoading) {
+          return;
+        }
+
+        if (stateType == widget.loadingStateType) {
+          if (isCurrent) {
+            _iStartedLoading = true;
+            AppDialogs.showLoading(context);
+          }
+        } else if (stateType == widget.successStateType) {
+          if (_iStartedLoading) {
+            _iStartedLoading = false;
+            AppDialogs.hideLoading(context);
+          }
+
+          if (widget.autoPopOnSuccess && Navigator.of(context).canPop()) {
             AppNav.pop(context);
           }
 
-          if (showSuccessDialog) {
+          if (widget.showSuccessDialog) {
             AppDialogs.showMessage(
               context: context,
-              title: successTitle,
-              message: successMessage ?? 'Operation completed successfully',
+              title: widget.successTitle,
+              message:
+                  widget.successMessage ?? 'Operation completed successfully',
               positiveButton: 'Okay',
               icon: Icons.check_circle_outline_rounded,
               iconColor: Colors.green,
-              callback: onSuccess,
+              callback: widget.onSuccess,
             );
+          } else {
+            widget.onSuccess?.call();
           }
-        } else if (stateType == failureStateType) {
+        } else if (stateType == widget.failureStateType) {
+          if (_iStartedLoading) {
+            _iStartedLoading = false;
+            AppDialogs.hideLoading(context);
+          }
+
           final errorMessage =
-              errorExtractor?.call(state) ?? 'Something went wrong';
+              widget.errorExtractor?.call(state) ?? 'Something went wrong';
 
           AppDialogs.showMessage(
             context: context,
-            title: errorTitle,
+            title: widget.errorTitle,
             message: errorMessage,
             positiveButton: 'Okay',
             icon: Icons.error_outline_rounded,
             iconColor: Colors.red,
-            callback: onFailure,
+            callback: widget.onFailure,
           );
+        } else {
+          // If state is neither loading, success, nor failure, reset the flag.
+          // This handles cases where state might transition elsewhere.
+          _iStartedLoading = false;
         }
       },
-      child: child,
+      child: widget.child,
     );
   }
 }

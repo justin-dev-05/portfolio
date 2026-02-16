@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +6,11 @@ import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/constants/assets_constant.dart';
 import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/features/auth/ui/login/login_screen.dart';
+import 'package:pdi_dost/features/auth/bloc/onboarding/onboarding_bloc.dart';
+import 'package:pdi_dost/features/auth/ui/onboarding/onboarding_screen.dart';
+import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
 import 'package:pdi_dost/features/dashboard/bloc/splash/splash_bloc.dart';
+import 'package:pdi_dost/features/dashboard/ui/dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,16 +24,37 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     context.read<SplashBloc>().add(SplashStarted());
+    context.read<OnboardingBloc>().add(CheckOnboardingStatus());
+    context.read<AuthBloc>().add(AuthCheckRequested());
+  }
+
+  void _handleNavigation() {
+    final onboardingState = context.read<OnboardingBloc>().state;
+    final authState = context.read<AuthBloc>().state;
+
+    if (onboardingState is OnboardingNotCompleted) {
+      AppNav.replace(context, const OnboardingScreen());
+    } else {
+      if (authState is AuthAuthenticated) {
+        AppNav.replace(context, const DashboardScreen());
+      } else {
+        AppNav.replace(context, const LoginScreen());
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SplashBloc, SplashState>(
-      listener: (context, state) {
-        if (state is SplashCompleted) {
-          AppNav.replace(context, const LoginScreen());
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SplashBloc, SplashState>(
+          listener: (context, splashState) {
+            if (splashState is SplashCompleted) {
+              _handleNavigation();
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         body: Container(
           width: double.infinity,
@@ -54,7 +78,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Container(
                   padding: EdgeInsets.all(24.r),
                   decoration: BoxDecoration(
-                    // color: Colors.white,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(

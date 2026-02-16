@@ -14,7 +14,7 @@ class LoginController extends BaseScreenController {
   @override
   void validateForm() {
     final isEmailValid = FormValidators.email(email.text.text.trim()) == null;
-    final isPasswordValid = password.text.text.trim().isNotEmpty;
+    final isPasswordValid = password.text.text.trim().length >= 6;
 
     isFormValid = isEmailValid && isPasswordValid;
   }

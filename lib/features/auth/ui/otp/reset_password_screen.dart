@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
-import 'package:pdi_dost/core/utils/app_snackbar.dart';
+import 'package:pdi_dost/core/widgets/api_state_bloc_listener.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
-import 'package:pdi_dost/core/widgets/app_dialogs.dart';
 import 'package:pdi_dost/core/widgets/app_text_field.dart';
 import 'package:pdi_dost/core/widgets/common_scaffold.dart';
 import 'package:pdi_dost/core/widgets/form_validation_helper.dart';
@@ -54,235 +54,184 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return CommonScaffold(
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is PasswordReset) {
-            AppDialogs.showMessage(
-              context: context,
-              title: AppStrings.passwordResetSuccessful,
-              message: AppStrings.passwordResetMsg,
-              positiveButton: AppStrings.goToLogin,
-              icon: Icons.check_circle_outline_rounded,
-              iconColor: Colors.green,
-              callback: () {
-                AppNav.pop(context); // Close dialog
-                AppNav.pushAndRemoveUntil(context, const LoginScreen());
-              },
-            );
-          } else if (state is AuthFailure) {
-            AppSnackBar.error(context, state.message);
-          }
+      showAppBar: true,
+      body: ApiStateBlocListener<AuthBloc, AuthState>(
+        loadingStateType: AuthLoading,
+        successStateType: PasswordReset,
+        failureStateType: AuthFailure,
+        errorExtractor: (state) => (state as AuthFailure).message,
+        showSuccessDialog: true,
+        successTitle: AppStrings.passwordResetSuccessful,
+        successMessage: AppStrings.passwordResetMsg,
+        onSuccess: () {
+          AppNav.pushAndRemoveUntil(context, const LoginScreen());
         },
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(30.r),
-          child: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // SizedBox(height: 50.h),
-                  // // Back Button
-                  // FadeInLeft(
-                  //   child: IconButton(
-                  //     onPressed: () => Navigator.pop(context),
-                  //     icon: const Icon(Icons.arrow_back_ios_rounded),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 20.h),
-                  // Header
+                  // Header Icon
                   FadeInDown(
+                    child: Center(
+                      child: Container(
+                        padding: EdgeInsets.all(24.r),
+                        decoration: BoxDecoration(
+                          color: theme.primaryColor.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.lock_open_rounded,
+                          size: 50.sp,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                  // Texts
+                  FadeInDown(
+                    delay: const Duration(milliseconds: 200),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Container(
-                        //   padding: EdgeInsets.all(16.r),
-                        //   decoration: BoxDecoration(
-                        //     gradient: LinearGradient(
-                        //       colors: [
-                        //         AppColors.success,
-                        //         AppColors.success.withValues(alpha: 0.7),
-                        //       ],
-                        //       begin: Alignment.topLeft,
-                        //       end: Alignment.bottomRight,
-                        //     ),
-                        //     borderRadius: BorderRadius.circular(16.r),
-                        //     boxShadow: [
-                        //       BoxShadow(
-                        //         color: AppColors.success.withValues(alpha: 0.3),
-                        //         blurRadius: 20,
-                        //         offset: const Offset(0, 8),
-                        //       ),
-                        //     ],
-                        //   ),
-                        //   child: Icon(
-                        //     Icons.lock_open_rounded,
-                        //     size: 40.sp,
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
-                        // SizedBox(height: 20.h),
                         Text(
                           AppStrings.createNewPassword,
-                          style: Theme.of(context).textTheme.displaySmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 25.sp,
+                            color: isDark
+                                ? Colors.white
+                                : AppColors.textPrimaryLight,
+                            letterSpacing: -0.5,
+                          ),
                         ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          AppStrings.createNewPasswordSubtitle,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: Colors.grey.shade600,
-                            height: 1.5,
+                        SizedBox(height: 12.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Text(
+                            AppStrings.createNewPasswordSubtitle,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: isDark
+                                  ? AppColors.textSecondaryDark
+                                  : AppColors.textSecondaryLight,
+                              height: 1.5,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  // SizedBox(height: 10.h),
-                  // Password Requirements
-                  // FadeInLeft(
-                  //   delay: const Duration(milliseconds: 100),
-                  //   child: Container(
-                  //     padding: EdgeInsets.all(16.r),
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.blue.shade50,
-                  //       borderRadius: BorderRadius.circular(12.r),
-                  //       border: Border.all(color: Colors.blue.shade200),
-                  //     ),
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Row(
-                  //           children: [
-                  //             Icon(
-                  //               Icons.info_outline_rounded,
-                  //               color: Colors.blue.shade600,
-                  //               size: 20.sp,
-                  //             ),
-                  //             SizedBox(width: 8.w),
-                  //             Text(
-                  //               'Password Requirements:',
-                  //               style: TextStyle(
-                  //                 fontSize: 14.sp,
-                  //                 fontWeight: FontWeight.w600,
-                  //                 color: Colors.blue.shade600,
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         SizedBox(height: 8.h),
-                  //         ...[
-                  //           'At least 6 characters',
-                  //           'Include letters and numbers',
-                  //           'Cannot be same as email',
-                  //         ].map(
-                  //           (requirement) => Padding(
-                  //             padding: EdgeInsets.only(left: 28.w, top: 4.h),
-                  //             child: Row(
-                  //               children: [
-                  //                 Icon(
-                  //                   Icons.check_circle_outline_rounded,
-                  //                   color: Colors.blue.shade400,
-                  //                   size: 16.sp,
-                  //                 ),
-                  //                 SizedBox(width: 8.w),
-                  //                 Text(
-                  //                   requirement,
-                  //                   style: TextStyle(
-                  //                     fontSize: 12.sp,
-                  //                     color: Colors.blue.shade700,
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  SizedBox(height: 30.h),
-                  // New Password Field
-                  FadeInLeft(
-                    delay: const Duration(milliseconds: 200),
-                    child: AppField(
-                      label: AppStrings.newPassword,
-                      controller: _password.text,
-                      focusNode: _password.focus,
-                      hint: AppStrings.newPasswordHint,
-                      isRequired: true,
-                      variant: FieldVariant.password,
-                      prefix: const Icon(Icons.lock_outline_rounded),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (v) =>
-                          FormValidators.password(v, minLength: 6),
-                      onChanged: (_) => _validateForm(),
-                      helperText: AppStrings.min6Chars,
+                  SizedBox(height: 20.h),
+
+                  // Input Card
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 400),
+                    child: Container(
+                      padding: EdgeInsets.all(24.r),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppColors.surfaceDark.withValues(alpha: 0.6)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(30.r),
+                        border: Border.all(
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.05)
+                              : AppColors.primaryLight.withValues(alpha: 0.1),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          AppField(
+                            label: AppStrings.newPassword,
+                            controller: _password.text,
+                            focusNode: _password.focus,
+                            hint: AppStrings.newPasswordHint,
+                            isRequired: true,
+                            variant: FieldVariant.password,
+                            prefix: const Icon(
+                              Icons.lock_outline_rounded,
+                              size: 20,
+                            ),
+                            validator: (v) =>
+                                FormValidators.password(v, minLength: 6),
+                            onChanged: (_) => _validateForm(),
+                            helperText: AppStrings.min6Chars,
+                          ),
+                          SizedBox(height: 24.h),
+                          AppField(
+                            label: AppStrings.confirmNewPassword,
+                            controller: _confirmPassword.text,
+                            focusNode: _confirmPassword.focus,
+                            hint: AppStrings.confirmNewPasswordHint,
+                            isRequired: true,
+                            variant: FieldVariant.password,
+                            prefix: const Icon(
+                              Icons.lock_outline_rounded,
+                              size: 20,
+                            ),
+                            validator: (v) => FormValidators.passwordMatch(
+                              v,
+                              _password.text.text,
+                            ),
+                            onChanged: (_) => _validateForm(),
+                            helperText: AppStrings.mustMatchPassword,
+                          ),
+                          SizedBox(height: 20.h),
+
+                          // Reset Button
+                          BlocBuilder<AuthBloc, AuthState>(
+                            builder: (context, state) {
+                              return AppButton(
+                                text: AppStrings.resetPassword,
+                                isEnabled:
+                                    _isFormValid && state is! AuthLoading,
+                                // isLoading: state is AuthLoading,
+                                onPressed: _onResetPassword,
+                                borderRadius: 15.r,
+                                height: 56.h,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: 20.h),
 
-                  // Confirm Password Field
-                  FadeInLeft(
-                    delay: const Duration(milliseconds: 300),
-                    child: AppField(
-                      label: AppStrings.confirmNewPassword,
-                      controller: _confirmPassword.text,
-                      focusNode: _confirmPassword.focus,
-                      hint: AppStrings.confirmNewPasswordHint,
-                      isRequired: true,
-                      variant: FieldVariant.password,
-                      prefix: const Icon(Icons.lock_outline_rounded),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (v) =>
-                          FormValidators.passwordMatch(v, _password.text.text),
-                      onChanged: (_) => _validateForm(),
-                      helperText: AppStrings.mustMatchPassword,
-                    ),
-                  ),
-                  SizedBox(height: 40.h),
-
-                  // Reset Password Button
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 400),
-                    child: BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        return AppButton(
-                          text: AppStrings.resetPassword,
-                          icon: Icons.lock_reset_rounded,
-                          isEnabled: _isFormValid && state is! AuthLoading,
-                          isLoading: state is AuthLoading,
-                          onPressed: _onResetPassword,
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 30.h),
-
                   // Back to Login
-                  Center(
-                    child: FadeInUp(
-                      delay: const Duration(milliseconds: 500),
-                      child: TextButton.icon(
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 600),
+                    child: Center(
+                      child: AppTextButton(
+                        text: AppStrings.backToLogin,
+                        fontWeight: FontWeight.w800,
+                        textColor: theme.primaryColor,
                         onPressed: () {
-                          AppNav.pushAndRemoveUntil(context, const LoginScreen());
+                          AppNav.pushAndRemoveUntil(
+                            context,
+                            const LoginScreen(),
+                          );
                         },
-                        icon: const Icon(Icons.arrow_back_rounded, size: 16),
-                        label: Text(
-                          AppStrings.backToLogin,
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
                       ),
                     ),
                   ),
+                  // SizedBox(height: 20.h),
                 ],
               ),
             ),

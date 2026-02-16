@@ -1,11 +1,15 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/features/auth/bloc/onboarding/onboarding_bloc.dart';
+import 'package:pdi_dost/core/widgets/app_button.dart';
+import 'package:pdi_dost/features/auth/data/models/OnboardingData.dart';
 import '../login/login_screen.dart';
+import '../widgets/onboarding_widgets.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -17,29 +21,43 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  Timer? _timer;
+  final Duration _transitionDuration = const Duration(milliseconds: 1200);
+  final Curve _transitionCurve = Curves.easeInOutCubic;
 
-  final List<OnboardingData> _data = [
-    OnboardingData(
-      title: AppStrings.onboarding1Title,
-      description: AppStrings.onboarding1Desc,
-      icon: Icons.task_alt_rounded,
-      color: const Color(0xFF6366F1),
-    ),
-    OnboardingData(
-      title: AppStrings.onboarding2Title,
-      description: AppStrings.onboarding2Desc,
-      icon: Icons.priority_high_rounded,
-      color: const Color(0xFFF43F5E),
-    ),
-    OnboardingData(
-      title: AppStrings.onboarding3Title,
-      description: AppStrings.onboarding3Desc,
-      icon: Icons.bar_chart_rounded,
-      color: const Color(0xFF10B981),
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_currentPage < onBoardingData.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      if (_pageController.hasClients) {
+        _pageController.animateToPage(
+          _currentPage,
+          duration: _transitionDuration,
+          curve: _transitionCurve,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
 
   void _onFinish() {
+    _timer?.cancel();
     context.read<OnboardingBloc>().add(CompleteOnboarding());
     AppNav.replace(context, const LoginScreen());
   }
@@ -47,130 +65,94 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.black,
       body: Stack(
         children: [
+          // GLOBAL BACKGROUND
+          Positioned.fill(
+            child: OnboardingBackground(
+              pageController: _pageController,
+              data: onBoardingData,
+              currentPage: _currentPage,
+            ),
+          ),
+
+          // CONTENT LAYER
           PageView.builder(
             controller: _pageController,
-            onPageChanged: (index) => setState(() => _currentPage = index),
-            itemCount: _data.length,
+            onPageChanged: (index) {
+              setState(() => _currentPage = index);
+              _startAutoScroll();
+            },
+            physics: const BouncingScrollPhysics(),
+            itemCount: onBoardingData.length,
             itemBuilder: (context, index) {
-              final item = _data[index];
-              return Container(
-                color: item.color.withValues(alpha: 0.05),
-                padding: EdgeInsets.all(40.r),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FadeInDown(
-                      child: Container(
-                        padding: EdgeInsets.all(30.r),
-                        decoration: BoxDecoration(
-                          color: item.color.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(item.icon, size: 100.sp, color: item.color),
-                      ),
-                    ),
-                    SizedBox(height: 50.h),
-                    FadeInUp(
-                      child: Text(
-                        item.title,
-                        style: TextStyle(
-                          fontSize: 28.sp,
-                          fontWeight: FontWeight.bold,
-                          color: item.color,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20.h),
-                    FadeInUp(
-                      delay: const Duration(milliseconds: 200),
-                      child: Text(
-                        item.description,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: Colors.grey,
-                          height: 1.5,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              return OnboardingPageContent(
+                item: onBoardingData[index],
+                index: index,
               );
             },
           ),
+
+          // BOTTOM CONTROLS LAYER
           Positioned(
-            bottom: 50.h,
-            left: 20.w,
-            right: 20.w,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: _onFinish,
-                  child: Text(
-                    AppStrings.skip,
-                    style: TextStyle(color: Colors.grey, fontSize: 14.sp),
-                  ),
-                ),
-                Row(
-                  children: List.generate(
-                    _data.length,
-                    (index) => AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      margin: EdgeInsets.only(right: 8.w),
-                      height: 8.h,
-                      width: _currentPage == index ? 24.w : 8.w,
-                      decoration: BoxDecoration(
-                        color: _currentPage == index
-                            ? _data[index].color
-                            : Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(4.r),
+            bottom: 40.h,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                layoutBuilder: (currentChild, previousChildren) {
+                  return Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[...previousChildren, ?currentChild],
+                  );
+                },
+                transitionBuilder: (child, animation) =>
+                    FadeTransition(opacity: animation, child: child),
+                child: _currentPage == onBoardingData.length - 1
+                    ? AppButton(
+                        key: const ValueKey('get_started_btn'),
+                        text: "Get Started",
+                        onPressed: _onFinish,
+                        borderRadius: 30.r,
+                        backgroundColor: AppColors.primaryLight,
+                        textColor: AppColors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      )
+                    : Row(
+                        key: const ValueKey('nav_btns'),
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AppTextButton(
+                            text: AppStrings.skip,
+                            textColor: AppColors.white,
+                            onPressed: _onFinish,
+                          ),
+                          Expanded(
+                            child: OnboardingPageIndicators(
+                              itemCount: onBoardingData.length,
+                              currentPage: _currentPage,
+                            ),
+                          ),
+                          OnboardingNextButton(
+                            onTap: () {
+                              _pageController.nextPage(
+                                duration: _transitionDuration,
+                                curve: _transitionCurve,
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                ),
-                FloatingActionButton(
-                  key: Key("onBoaring"),
-                  onPressed: () {
-                    if (_currentPage < _data.length - 1) {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    } else {
-                      _onFinish();
-                    }
-                  },
-                  backgroundColor: _data[_currentPage].color,
-                  child: Icon(
-                    _currentPage == _data.length - 1
-                        ? Icons.check
-                        : Icons.arrow_forward_ios,
-                    color: Colors.white,
-                    size: 18.sp,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
-}
-
-class OnboardingData {
-  final String title;
-  final String description;
-  final IconData icon;
-  final Color color;
-
-  OnboardingData({
-    required this.title,
-    required this.description,
-    required this.icon,
-    required this.color,
-  });
 }

@@ -13,6 +13,8 @@ class CommonScaffold extends StatelessWidget {
   final bool showAppBar;
   final PreferredSizeWidget? appBar;
   final bool centerTitle;
+  final bool? resizeToAvoidBottomInset;
+  final Widget? bottomNavigationBar;
 
   const CommonScaffold({
     super.key,
@@ -24,6 +26,8 @@ class CommonScaffold extends StatelessWidget {
     this.appBar,
     this.showAppBar = true,
     this.centerTitle = true,
+    this.resizeToAvoidBottomInset,
+    this.bottomNavigationBar,
   });
 
   @override
@@ -55,7 +59,9 @@ class CommonScaffold extends StatelessWidget {
                   )
                 : appBar,
             body: SafeArea(child: body),
+            bottomNavigationBar: bottomNavigationBar,
             floatingActionButton: floatingActionButton,
+            resizeToAvoidBottomInset: resizeToAvoidBottomInset,
           ),
         );
       },

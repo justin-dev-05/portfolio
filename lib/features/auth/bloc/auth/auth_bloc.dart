@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
-
 export 'auth_event.dart';
 export 'auth_state.dart';
 
@@ -41,7 +41,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await sharedPreferences.setString(_emailKey, event.email);
         emit(AuthAuthenticated(username: username, email: event.email));
       } else {
-        emit(const AuthFailure('Invalid email or password (min 6 chars)'));
+        emit(const AuthFailure(AppStrings.invalidEmailOrPassword));
       }
     });
 
@@ -60,7 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await sharedPreferences.remove(_userKey);
       await sharedPreferences.remove(_emailKey);
       await sharedPreferences.remove(_imageKey);
-      await Future.delayed(const Duration(milliseconds: 500));
+      // await Future.delayed(const Duration(milliseconds: 500));
       emit(AuthUnauthenticated());
     });
 
@@ -93,7 +93,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (event.email.contains('@')) {
         emit(OTPSent(event.email));
       } else {
-        emit(const AuthFailure('Invalid email address'));
+        emit(const AuthFailure(AppStrings.invalidEmailAddress));
       }
     });
 
@@ -103,7 +103,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (event.otp == '1234') {
         emit(const OTPVerified());
       } else {
-        emit(const AuthFailure('Invalid OTP. Please try again.'));
+        emit(const AuthFailure(AppStrings.invalidOtpTryAgain));
       }
     });
 
@@ -113,7 +113,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (event.newPassword.length >= 6) {
         emit(const PasswordReset());
       } else {
-        emit(const AuthFailure('Password must be at least 6 characters'));
+        emit(const AuthFailure(AppStrings.passwordMin6Chars));
+      }
+    });
+    on<ChangePasswordRequested>((event, emit) async {
+      emit(AuthLoading());
+      await Future.delayed(const Duration(seconds: 2));
+      // Mock success
+      emit(const PasswordChanged());
+    });
+
+    on<AuthResetStateRequested>((event, emit) {
+      if (state is! AuthAuthenticated) {
+        emit(AuthInitial());
       }
     });
   }

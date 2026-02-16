@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pdi_dost/core/constants/app_constants.dart';
@@ -72,6 +73,49 @@ class AppHelper {
     } else {
       debugPrint('Could not launch $url');
     }
+  }
+
+  /// Shares a URL using the system share sheet
+  static Future<void> shareUrl(String shareUrl) async {
+    try {
+      final params = ShareParams(uri: Uri.parse(shareUrl));
+      await SharePlus.instance.share(params);
+    } catch (e, stackTrace) {
+      debugPrint('Share failed: $e');
+      debugPrint('StackTrace: $stackTrace');
+    }
+  }
+
+  void shareApp(
+    BuildContext context, {
+    String? androidUrl,
+    String? appleUrl,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    final String androidLink = androidUrl ?? Common.androidUrl;
+    final String iosLink = appleUrl ?? Common.iosUrl;
+
+    final String message =
+        '''
+🚗 PDI-DOST – Smart Car Inspection App
+
+Inspect vehicles faster, smarter, and more accurately with PDI-DOST.
+
+✅ Digital car inspection reports  
+📸 Capture multiple vehicle images  
+🔧 Engine, body & OBD inspection  
+📝 Auto-saved inspection data  
+📊 Professional inspection reports  
+
+Download the app now:
+
+👉 Android: $androidLink  
+👉 iOS: $iosLink
+''';
+    await SharePlus.instance.share(
+      ShareParams(subject: "PDI-DOST – Car Inspection App", text: message),
+    );
   }
 
   /// Makes a phone call

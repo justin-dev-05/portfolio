@@ -47,3 +47,7 @@ class OTPVerified extends AuthState {
 class PasswordReset extends AuthState {
   const PasswordReset();
 }
+
+class PasswordChanged extends AuthState {
+  const PasswordChanged();
+}

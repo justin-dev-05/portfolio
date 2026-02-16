@@ -63,6 +63,10 @@ class FormValidators {
       return 'Email is required';
     }
 
+    if (value.contains(' ')) {
+      return 'Space not allowed';
+    }
+
     final emailRegex = RegExp(
       r'^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$',
     );

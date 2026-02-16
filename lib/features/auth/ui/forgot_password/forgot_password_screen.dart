@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
+import 'package:pdi_dost/core/utils/app_nav.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
+import 'package:pdi_dost/core/widgets/api_state_bloc_listener.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
 import 'package:pdi_dost/core/widgets/app_text_field.dart';
 import 'package:pdi_dost/core/widgets/common_scaffold.dart';
@@ -24,6 +25,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isFormValid = false;
 
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(AuthResetStateRequested());
+  }
+
   void _validateForm() {
     final isEmailValid = FormValidators.email(_email.text.text.trim()) == null;
 
@@ -42,115 +49,169 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return CommonScaffold(
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
+      showAppBar: true,
+      body: ApiStateBlocListener<AuthBloc, AuthState>(
+        loadingStateType: AuthLoading,
+        successStateType: OTPSent,
+        failureStateType: AuthFailure,
+        errorExtractor: (state) => (state as AuthFailure).message,
+        onSuccess: () {
+          final state = context.read<AuthBloc>().state;
           if (state is OTPSent) {
             AppNav.push(context, OTPVerificationScreen(email: state.email));
-          } else if (state is AuthFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: AppColors.error,
-              ),
-            );
           }
         },
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(30.r),
-          child: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Icon Header
                   FadeInDown(
+                    child: Center(
+                      child: Container(
+                        padding: EdgeInsets.all(20.r),
+                        decoration: BoxDecoration(
+                          color: theme.primaryColor.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.lock_reset_rounded,
+                          size: 50.sp,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                  // Texts
+                  FadeInDown(
+                    delay: const Duration(milliseconds: 200),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20.h),
                         Text(
                           AppStrings.forgotPassword,
-                          style: Theme.of(context).textTheme.displaySmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 25.sp,
+                            color: isDark
+                                ? Colors.white
+                                : AppColors.textPrimaryLight,
+                            letterSpacing: -0.5,
+                          ),
                         ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          AppStrings.forgotPasswordSubtitle,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: Colors.grey.shade600,
-                            height: 1.5,
+                        SizedBox(height: 12.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Text(
+                            AppStrings.forgotPasswordSubtitle,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: isDark
+                                  ? AppColors.textSecondaryDark
+                                  : AppColors.textSecondaryLight,
+                              height: 1.5,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 50.h),
-                  // Email Field
-                  FadeInLeft(
-                    child: AppField(
-                      label: AppStrings.emailAddress,
-                      controller: _email.text,
-                      focusNode: _email.focus,
-                      hint: AppStrings.emailHintRegistered,
-                      isRequired: true,
-                      prefix: const Icon(Icons.email_outlined),
-                      keyboardType: TextInputType.emailAddress,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: FormValidators.email,
-                      onChanged: (_) => _validateForm(),
-                      helperText: AppStrings.sendOTPHelper,
-                    ),
-                  ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 20.h),
 
-                  // Send OTP Button
+                  // Input Card
                   FadeInUp(
-                    child: BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        return AppButton(
-                          text: AppStrings.sendOTP,
-                          // icon: Icons.send_rounded,
-                          isEnabled: _isFormValid && state is! AuthLoading,
-                          isLoading: state is AuthLoading,
-                          onPressed: _onSendOTP,
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 30.h),
-
-                  // Back to Login
-                  Center(
-                    child: FadeInUp(
-                      delay: const Duration(milliseconds: 200),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppStrings.rememberPassword,
-                            style: TextStyle(fontSize: 14.sp),
+                    delay: const Duration(milliseconds: 400),
+                    child: Container(
+                      padding: EdgeInsets.all(24.r),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppColors.surfaceDark.withValues(alpha: 0.6)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(30.r),
+                        border: Border.all(
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.05)
+                              : AppColors.primaryLight.withValues(alpha: 0.1),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
                           ),
-                          TextButton(
-                            onPressed: () => AppNav.pop(context),
-                            child: Text(
-                              AppStrings.login,
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          AppField(
+                            label: AppStrings.emailAddress,
+                            controller: _email.text,
+                            focusNode: _email.focus,
+                            hint: AppStrings.emailHintRegistered,
+                            isRequired: true,
+                            prefix: const Icon(Icons.email_rounded, size: 20),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: FormValidators.email,
+                            onChanged: (_) => _validateForm(),
+                            helperText: AppStrings.sendOTPHelper,
+                          ),
+                          SizedBox(height: 32.h),
+
+                          // Send OTP Button
+                          BlocBuilder<AuthBloc, AuthState>(
+                            builder: (context, state) {
+                              return AppButton(
+                                text: AppStrings.sendOTP,
+                                isEnabled:
+                                    _isFormValid && state is! AuthLoading,
+                                // isLoading: state is AuthLoading,
+                                onPressed: _onSendOTP,
+                                borderRadius: 15.r,
+                                height: 56.h,
+                              );
+                            },
                           ),
                         ],
                       ),
                     ),
                   ),
+                  SizedBox(height: 32.h),
+
+                  // Back to Login
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 600),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppStrings.rememberPassword,
+                          style: TextStyle(
+                            color: isDark
+                                ? Colors.white70
+                                : AppColors.textSecondaryLight,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                        AppTextButton(
+                          text: AppStrings.login,
+                          fontWeight: FontWeight.w800,
+                          textColor: theme.primaryColor,
+                          onPressed: () => AppNav.pop(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
                 ],
               ),
             ),

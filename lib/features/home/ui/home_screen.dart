@@ -8,6 +8,8 @@ import 'package:pdi_dost/features/dashboard/bloc/bottom_nav/bottom_nav_bloc.dart
 import '../bloc/home/home_bloc.dart';
 import 'widgets/inspection_list_item.dart';
 import 'package:pdi_dost/core/widgets/toolbar.dart';
+import 'package:pdi_dost/core/widgets/shimmer_widgets.dart';
+import 'package:pdi_dost/features/notification/ui/notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) {
                 if (state is HomeLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const HomeShimmer();
                 }
 
                 if (state is HomeLoaded) {
@@ -87,9 +89,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               } else {
                                 return Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20.h),
-                                  child: const Center(
-                                    child: CircularProgressIndicator(),
+                                  padding: EdgeInsets.all(16.r),
+                                  child: const AppShimmer(
+                                    child: ShimmerContainer(
+                                      height: 100,
+                                      borderRadius: 24,
+                                    ),
                                   ),
                                 );
                               }
@@ -104,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 }
-
                 return const SizedBox();
               },
             ),
@@ -113,7 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 
   Widget _buildHeader() {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -126,16 +129,19 @@ class _HomeScreenState extends State<HomeScreen> {
         return Toolbar.homeHeader(
           context,
           name: name,
-          notificationCount: 3, // Hardcoded for now as per previous code
+          notificationCount: 3,
           onProfileTap: () {
             context.read<BottomNavBloc>().add(const TabChangedEvent(3));
           },
           onNotificationTap: () {
-            // TODO: Implement notification tap
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NotificationScreen(),
+              ),
+            );
           },
-          onSearchChanged: (value) {
-            // TODO: Implement search
-          },
+          onSearchChanged: (value) {},
         );
       },
     );
