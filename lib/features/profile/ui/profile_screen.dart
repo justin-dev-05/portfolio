@@ -11,7 +11,7 @@ import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
 import 'package:pdi_dost/features/auth/ui/login/login_screen.dart';
 import 'package:pdi_dost/features/profile/ui/edit_profile_screen.dart';
 import 'package:pdi_dost/features/profile/ui/change_password_screen.dart';
-import 'package:pdi_dost/features/profile/ui/widgets/profile_widgets.dart';
+import 'package:pdi_dost/features/profile/widgets/profile_widgets.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -34,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
           children: [
             // Styled Background Header
             Container(
-              height: 265.h,
+              height: 250.h,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [primaryColor, primaryColor.withValues(alpha: 0.8)],
@@ -60,7 +60,7 @@ class ProfileScreen extends StatelessWidget {
                     child: Text(
                       AppStrings.profile,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -77,14 +77,14 @@ class ProfileScreen extends StatelessWidget {
                   //         onPressed: () => AppNav.pop(context),
                   //         icon: const Icon(
                   //           Icons.arrow_back_rounded,
-                  //           color: Colors.white,
+                  //           color: AppColors.white,
                   //         ),
                   //       ),
                   //       const Spacer(),
                   //       Text(
                   //         AppStrings.profile,
                   //         style: TextStyle(
-                  //           color: Colors.white,
+                  //           color: AppColors.white,
                   //           fontSize: 20.sp,
                   //           fontWeight: FontWeight.bold,
                   //         ),
@@ -101,15 +101,14 @@ class ProfileScreen extends StatelessWidget {
                       isDarkHeader: true,
                     ),
                   ),
-                  SizedBox(height: 25.h),
+                  SizedBox(height: 20.h),
                   Expanded(
                     child: SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
-                      // padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                       padding: EdgeInsets.only(
                         left: 20.w,
                         right: 20.w,
-                        top: 10.h,
+                        top: 5.h,
                         bottom: 20.h,
                       ),
                       child: Column(

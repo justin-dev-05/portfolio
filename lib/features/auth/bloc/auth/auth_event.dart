@@ -79,3 +79,13 @@ class ChangePasswordRequested extends AuthEvent {
 }
 
 class AuthResetStateRequested extends AuthEvent {}
+
+class CjRequestSubmitted extends AuthEvent {
+  final Map<String, String> fields;
+  final Map<String, String> filePaths;
+
+  const CjRequestSubmitted({required this.fields, required this.filePaths});
+
+  @override
+  List<Object?> get props => [fields, filePaths];
+}

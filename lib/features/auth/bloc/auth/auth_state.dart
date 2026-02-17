@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'package:pdi_dost/features/auth/model/LoginModel.dart';
+
 abstract class AuthState extends Equatable {
   const AuthState();
   @override
@@ -14,14 +16,17 @@ class AuthAuthenticated extends AuthState {
   final String username;
   final String email;
   final String? profileImagePath;
+  final LoginData? userData;
 
   const AuthAuthenticated({
     required this.username,
     required this.email,
     this.profileImagePath,
+    this.userData,
   });
+
   @override
-  List<Object?> get props => [username, email, profileImagePath];
+  List<Object?> get props => [username, email, profileImagePath, userData];
 }
 
 class AuthUnauthenticated extends AuthState {}
@@ -50,4 +55,11 @@ class PasswordReset extends AuthState {
 
 class PasswordChanged extends AuthState {
   const PasswordChanged();
+}
+
+class CjRequestSuccess extends AuthState {
+  final String message;
+  const CjRequestSuccess(this.message);
+  @override
+  List<Object?> get props => [message];
 }

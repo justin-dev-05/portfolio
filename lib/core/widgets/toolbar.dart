@@ -36,8 +36,8 @@ class Toolbar {
                 padding: EdgeInsets.only(left: 12.w),
                 child: Material(
                   color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white.withValues(alpha: 0.05)
-                      : Colors.white,
+                      ? AppColors.white.withValues(alpha: 0.05)
+                      : AppColors.white,
                   shape: const CircleBorder(),
                   child: InkWell(
                     onTap: onBackTap ?? () => Navigator.of(context).pop(),
@@ -86,16 +86,21 @@ class Toolbar {
               Expanded(
                 child: Row(
                   children: [
-                    GestureDetector(
-                      onTap: onProfileTap,
-                      child: CircleAvatar(
-                        radius: 24.r,
-                        backgroundColor: Theme.of(
-                          context,
-                        ).primaryColor.withValues(alpha: 0.1),
-                        child: Icon(
-                          Icons.person,
-                          color: Theme.of(context).primaryColor,
+                    Material(
+                      color: Theme.of(
+                        context,
+                      ).primaryColor.withValues(alpha: 0.1),
+                      shape: const CircleBorder(),
+                      child: InkWell(
+                        onTap: onProfileTap,
+                        customBorder: const CircleBorder(),
+                        child: Padding(
+                          padding: EdgeInsets.all(12.r),
+                          child: Icon(
+                            Icons.person,
+                            color: Theme.of(context).primaryColor,
+                            size: 24.r,
+                          ),
                         ),
                       ),
                     ),
@@ -127,28 +132,27 @@ class Toolbar {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: onNotificationTap,
-                child: Container(
-                  padding: EdgeInsets.all(10.r),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceColor(isDark),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
+              Material(
+                color: isDark
+                    ? AppColors.white.withValues(alpha: 0.05)
+                    : AppColors.white,
+                shape: const CircleBorder(),
+                elevation: 0,
+                child: InkWell(
+                  onTap: onNotificationTap,
+                  customBorder: const CircleBorder(),
+                  child: Container(
+                    padding: EdgeInsets.all(10.r),
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    child: Badge(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      label: Text(notificationCount.toString()),
+                      isLabelVisible: notificationCount > 0,
+                      child: Icon(
+                        Icons.notifications_none_rounded,
+                        size: 24.sp,
+                        color: AppColors.textPrimaryColor(isDark),
                       ),
-                    ],
-                  ),
-                  child: Badge(
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    label: Text(notificationCount.toString()),
-                    isLabelVisible: notificationCount > 0,
-                    child: Icon(
-                      Icons.notifications_none_rounded,
-                      size: 24.sp,
-                      color: AppColors.textPrimaryColor(isDark),
                     ),
                   ),
                 ),

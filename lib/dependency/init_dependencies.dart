@@ -30,7 +30,10 @@ Future<void> initDependencies() async {
   );
 
   serviceLocator.registerFactory<AuthBloc>(
-    () => AuthBloc(sharedPreferences: serviceLocator()),
+    () => AuthBloc(
+      sharedPreferences: serviceLocator(),
+      httpClient: serviceLocator(),
+    ),
   );
 
   serviceLocator.registerFactory<BottomNavBloc>(() => BottomNavBloc());

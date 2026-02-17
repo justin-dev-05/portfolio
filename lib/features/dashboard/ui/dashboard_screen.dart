@@ -29,7 +29,7 @@ class DashboardScreen extends StatelessWidget {
           onPopInvokedWithResult: (didPop, result) {
             if (didPop) return;
             if (state.currentIndex != 0) {
-              context.read<BottomNavBloc>().add(TabChangedEvent(0));
+              context.read<BottomNavBloc>().add(const TabChangedEvent(0));
             } else {
               AppDialogs.showExitDialog(context, () => exit(0));
             }
@@ -94,7 +94,7 @@ class PlaceholderScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       // body: Center(child: Text('$title Screen Placeholder')),
-      body: Center(child: Text(AppStrings.comingSoon)),
+      body: const Center(child: Text(AppStrings.comingSoon)),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/constants/assets_constant.dart';
+import 'package:pdi_dost/core/constants/font_constant.dart';
 import 'package:pdi_dost/core/constants/helper.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
 import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
@@ -35,7 +36,7 @@ class AppDialogs {
                 child: Container(
                   padding: EdgeInsets.all(20.r),
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.surfaceDark : Colors.white,
+                    color: isDark ? AppColors.surfaceDark : AppColors.white,
                     borderRadius: BorderRadius.circular(12.r),
                     boxShadow: [
                       BoxShadow(
@@ -75,7 +76,7 @@ class AppDialogs {
                                 shape: BoxShape.circle,
                                 color: isDark
                                     ? AppColors.surfaceDark
-                                    : Colors.white,
+                                    : AppColors.white,
                               ),
                               padding: EdgeInsets.all(6.r),
                               child: Image.asset(
@@ -88,11 +89,12 @@ class AppDialogs {
                       SizedBox(height: 12.h),
                       Text(
                         AppStrings.pleaseWait,
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
+                          fontFamily: AppFonts.archivo,
                           color: isDark
-                              ? Colors.white
+                              ? AppColors.white
                               : AppColors.textPrimaryLight,
                           decoration: TextDecoration.none,
                         ),
@@ -288,7 +290,9 @@ class AppDialogs {
                     style: TextStyle(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : AppColors.backgroundDark,
+                      color: isDark
+                          ? AppColors.white
+                          : AppColors.backgroundDark,
                     ),
                   ),
                   SizedBox(height: 12.h),
@@ -312,7 +316,9 @@ class AppDialogs {
                           height: 48.h,
                           borderRadius: 14.r,
                           borderColor:
-                              (isDark ? Colors.white : AppColors.primaryLight)
+                              (isDark
+                                      ? AppColors.white
+                                      : AppColors.primaryLight)
                                   .withValues(alpha: 0.2),
                           textColor: isDark
                               ? Colors.white70
@@ -404,6 +410,7 @@ class _AppDialogContentState extends State<_AppDialogContent> {
         color: Colors.transparent,
         child: Container(
           width: 0.8.sw,
+          constraints: BoxConstraints(maxHeight: 0.8.sh),
           padding: EdgeInsets.all(24.r),
           decoration: BoxDecoration(
             color: isDark ? AppColors.surfaceDark : AppColors.white,
@@ -454,22 +461,27 @@ class _AppDialogContentState extends State<_AppDialogContent> {
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : AppColors.backgroundDark,
+                    color: isDark ? AppColors.white : AppColors.backgroundDark,
                   ),
                 ),
               if ((widget.title ?? '').isNotEmpty) SizedBox(height: 12.h),
               if ((widget.message ?? '').isNotEmpty)
-                Text(
-                  widget.message!,
-                  textAlign: widget.isTitleLeft
-                      ? TextAlign.left
-                      : TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    height: 1.5,
-                    color: isDark
-                        ? AppColors.textSecondaryDark
-                        : AppColors.textSecondaryLight,
+                Flexible(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Text(
+                      widget.message!,
+                      textAlign: widget.isTitleLeft
+                          ? TextAlign.left
+                          : TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        height: 1.5,
+                        color: isDark
+                            ? AppColors.textSecondaryDark
+                            : AppColors.textSecondaryLight,
+                      ),
+                    ),
                   ),
                 ),
               SizedBox(height: 28.h),
@@ -482,7 +494,7 @@ class _AppDialogContentState extends State<_AppDialogContent> {
                         height: 48.h,
                         borderRadius: 14.r,
                         borderColor:
-                            (isDark ? Colors.white : AppColors.primaryLight)
+                            (isDark ? AppColors.white : AppColors.primaryLight)
                                 .withValues(alpha: 0.2),
                         textColor: isDark
                             ? Colors.white70

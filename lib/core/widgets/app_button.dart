@@ -53,7 +53,7 @@ class AppButton extends StatelessWidget {
         ? (backgroundColor ?? AppColors.primaryLight)
         : (disabledColor ?? Colors.grey.shade400);
 
-    final effectiveTextColor = textColor ?? Colors.white;
+    final effectiveTextColor = textColor ?? AppColors.white;
 
     return SizedBox(
       width: isFullWidth ? double.infinity : width,

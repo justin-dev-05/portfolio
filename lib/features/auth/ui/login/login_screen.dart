@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: theme.textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.w800,
                               color: isDark
-                                  ? Colors.white
+                                  ? AppColors.white
                                   : AppColors.textPrimaryLight,
                               letterSpacing: -0.5,
                             ),
@@ -118,11 +118,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: BoxDecoration(
                           color: isDark
                               ? AppColors.surfaceDark.withValues(alpha: 0.6)
-                              : Colors.white,
+                              : AppColors.white,
                           borderRadius: BorderRadius.circular(30.r),
                           border: Border.all(
                             color: isDark
-                                ? Colors.white.withValues(alpha: 0.05)
+                                ? AppColors.white.withValues(alpha: 0.05)
                                 : AppColors.primaryLight.withValues(alpha: 0.1),
                             width: 1.5,
                           ),
@@ -195,7 +195,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     return AppButton(
                                       text: AppStrings.login,
                                       isEnabled: _controller.isFormValid,
-                                      onPressed: _controller.onSubmit,
+                                      // onPressed: _controller.onSubmit,
+                                      onPressed: () {
+                                        AppNav.replace(
+                                          context,
+                                          const DashboardScreen(),
+                                        );
+                                      },
                                       borderRadius: 15.r,
                                       height: 56.h,
                                     );
@@ -227,8 +233,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: AppStrings.joinAsCJ,
                             fontWeight: FontWeight.w800,
                             textColor: theme.primaryColor,
-                            onPressed: () =>
-                                AppNav.push(context, const CjRequestScreen()),
+                            onPressed: () {},
+                            // onPressed: () =>
+                            //     AppNav.push(context, const CjRequestScreen()),
                           ),
                         ],
                       ),

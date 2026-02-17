@@ -143,7 +143,9 @@ class _NotificationItem extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.white,
+        color: isDark
+            ? AppColors.white.withValues(alpha: 0.05)
+            : AppColors.white,
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: isRead
@@ -188,7 +190,7 @@ class _NotificationItem extends StatelessWidget {
                               ? FontWeight.w600
                               : FontWeight.w800,
                           color: isDark
-                              ? Colors.white
+                              ? AppColors.white
                               : AppColors.backgroundDark,
                         ),
                       ),

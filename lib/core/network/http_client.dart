@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:pdi_dost/core/constants/api_constants.dart';
 import '../error/exceptions.dart';
 import 'network_info.dart';
 
@@ -8,6 +11,14 @@ class AppHttpClient {
   final http.Client client;
 
   AppHttpClient(this.client);
+
+  /// Helper to get full logic URL
+  Uri _getUri(String endpoint) {
+    if (endpoint.startsWith('http')) {
+      return Uri.parse(endpoint);
+    }
+    return Uri.parse('${ApiConstants.baseUrl}$endpoint');
+  }
 
   /// ---------------- COMMON HEADERS ----------------
   Map<String, String> _jsonHeaders({String? token}) => {
@@ -25,13 +36,16 @@ class AppHttpClient {
   }
 
   /// ---------------- GET ----------------
-  Future<dynamic> get(String url, {String? token}) async {
+  Future<dynamic> get(String endpoint, {String? token}) async {
     try {
       await _checkInternet();
+      final uri = _getUri(endpoint);
+      debugPrint('API GET: $uri');
       final response = await client.get(
-        Uri.parse(url),
+        uri,
         headers: _jsonHeaders(token: token),
       );
+      debugPrint('API RESPONSE [$uri]: ${response.body}');
       return _handleResponse(response);
     } catch (e) {
       throw ServerException(e.toString());
@@ -40,17 +54,21 @@ class AppHttpClient {
 
   /// ---------------- POST (JSON) ----------------
   Future<dynamic> post(
-    String url,
+    String endpoint,
     Map<String, dynamic> body, {
     String? token,
   }) async {
     try {
       await _checkInternet();
+      final uri = _getUri(endpoint);
+      debugPrint('API POST: $uri');
+      debugPrint('API BODY: ${json.encode(body)}');
       final response = await client.post(
-        Uri.parse(url),
+        uri,
         headers: _jsonHeaders(token: token),
         body: json.encode(body),
       );
+      debugPrint('API RESPONSE [$uri]: ${response.body}');
       return _handleResponse(response);
     } catch (e) {
       throw ServerException(e.toString());
@@ -59,14 +77,15 @@ class AppHttpClient {
 
   /// ---------------- PUT ----------------
   Future<dynamic> put(
-    String url,
+    String endpoint,
     Map<String, dynamic> body, {
     String? token,
   }) async {
     try {
       await _checkInternet();
+      final uri = _getUri(endpoint);
       final response = await client.put(
-        Uri.parse(url),
+        uri,
         headers: _jsonHeaders(token: token),
         body: json.encode(body),
       );
@@ -78,14 +97,15 @@ class AppHttpClient {
 
   /// ---------------- PATCH ----------------
   Future<dynamic> patch(
-    String url,
+    String endpoint,
     Map<String, dynamic> body, {
     String? token,
   }) async {
     try {
       await _checkInternet();
+      final uri = _getUri(endpoint);
       final response = await client.patch(
-        Uri.parse(url),
+        uri,
         headers: _jsonHeaders(token: token),
         body: json.encode(body),
       );
@@ -96,11 +116,12 @@ class AppHttpClient {
   }
 
   /// ---------------- DELETE ----------------
-  Future<dynamic> delete(String url, {String? token}) async {
+  Future<dynamic> delete(String endpoint, {String? token}) async {
     try {
       await _checkInternet();
+      final uri = _getUri(endpoint);
       final response = await client.delete(
-        Uri.parse(url),
+        uri,
         headers: _jsonHeaders(token: token),
       );
       return _handleResponse(response);
@@ -111,16 +132,18 @@ class AppHttpClient {
 
   /// ---------------- POST FORM DATA (FILE UPLOAD) ----------------
   Future<dynamic> postMultipart(
-    String url, {
+    String endpoint, {
     required Map<String, String> fields,
-    List<File>? files,
-    String fileKey = 'file',
+    Map<String, File>? files,
     String? token,
   }) async {
     try {
       await _checkInternet();
+      final uri = _getUri(endpoint);
+      debugPrint('API MULTIPART: $uri');
+      debugPrint('API FIELDS: $fields');
 
-      final request = http.MultipartRequest('POST', Uri.parse(url));
+      final request = http.MultipartRequest('POST', uri);
 
       request.headers.addAll({
         'Accept': 'application/json',
@@ -130,15 +153,17 @@ class AppHttpClient {
       request.fields.addAll(fields);
 
       if (files != null && files.isNotEmpty) {
-        for (final file in files) {
+        for (final entry in files.entries) {
+          debugPrint('API FILE [${entry.key}]: ${entry.value.path}');
           request.files.add(
-            await http.MultipartFile.fromPath(fileKey, file.path),
+            await http.MultipartFile.fromPath(entry.key, entry.value.path),
           );
         }
       }
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
+      debugPrint('API RESPONSE [$uri]: ${response.body}');
 
       return _handleResponse(response);
     } catch (e) {
@@ -155,21 +180,22 @@ class AppHttpClient {
     switch (statusCode) {
       case 200:
       case 201:
+      case 400: // Bad Request
+      case 401: // Unauthorized (often contains 'Invalid password' message)
+      case 422: // Unprocessable Content
         return json.decode(response.body);
 
-      case 400:
-        throw ServerException('Bad Request: ${response.body}');
-
-      case 401:
       case 403:
-        throw ServerException('Unauthorized: ${response.body}');
+        throw ServerException('Access Forbidden [403]');
 
       case 404:
-        throw ServerException('Not Found: ${response.body}');
+        throw ServerException('API Endpoint Not Found [404]');
 
       case 500:
+        throw ServerException('Internal Server Error [500]');
+
       default:
-        throw ServerException('Server Error [$statusCode]: ${response.body}');
+        throw ServerException('Network Error [$statusCode]');
     }
   }
 }

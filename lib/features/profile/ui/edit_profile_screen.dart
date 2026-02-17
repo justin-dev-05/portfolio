@@ -12,7 +12,7 @@ import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
 import 'package:pdi_dost/core/widgets/toolbar.dart';
 
 import 'package:pdi_dost/features/profile/controller/edit_profile_controller.dart';
-import 'package:pdi_dost/features/profile/ui/widgets/profile_widgets.dart';
+import 'package:pdi_dost/features/profile/widgets/profile_widgets.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});

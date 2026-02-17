@@ -107,7 +107,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             fontWeight: FontWeight.w800,
                             fontSize: 25.sp,
                             color: isDark
-                                ? Colors.white
+                                ? AppColors.white
                                 : AppColors.textPrimaryLight,
                             letterSpacing: -0.5,
                           ),
@@ -139,11 +139,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       decoration: BoxDecoration(
                         color: isDark
                             ? AppColors.surfaceDark.withValues(alpha: 0.6)
-                            : Colors.white,
+                            : AppColors.white,
                         borderRadius: BorderRadius.circular(30.r),
                         border: Border.all(
                           color: isDark
-                              ? Colors.white.withValues(alpha: 0.05)
+                              ? AppColors.white.withValues(alpha: 0.05)
                               : AppColors.primaryLight.withValues(alpha: 0.1),
                           width: 1.5,
                         ),

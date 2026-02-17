@@ -15,12 +15,12 @@ class OTPTheme {
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white.withValues(alpha: 0.05)
+            ? AppColors.white.withValues(alpha: 0.05)
             : Colors.grey.shade50,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
           color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white.withValues(alpha: 0.1)
+              ? AppColors.white.withValues(alpha: 0.1)
               : Colors.grey.shade300,
           width: 2,
         ),
@@ -32,8 +32,8 @@ class OTPTheme {
     return defaultPinTheme(context).copyWith(
       decoration: defaultPinTheme(context).decoration!.copyWith(
         color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white.withValues(alpha: 0.1)
-            : Colors.white,
+            ? AppColors.white.withValues(alpha: 0.1)
+            : AppColors.white,
         border: Border.all(color: AppColors.primaryLight, width: 2),
         boxShadow: [
           BoxShadow(
@@ -50,8 +50,8 @@ class OTPTheme {
     return defaultPinTheme(context).copyWith(
       decoration: defaultPinTheme(context).decoration!.copyWith(
         color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white.withValues(alpha: 0.08)
-            : Colors.white,
+            ? AppColors.white.withValues(alpha: 0.08)
+            : AppColors.white,
         border: Border.all(
           color: AppColors.primaryLight.withValues(alpha: 0.6),
           width: 2,

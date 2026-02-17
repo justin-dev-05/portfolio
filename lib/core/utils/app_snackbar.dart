@@ -84,13 +84,13 @@ class _SnackBarContent extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white, size: 22.sp),
+          Icon(icon, color: AppColors.white, size: 22.sp),
           SizedBox(width: 12.w),
           Expanded(
             child: Text(
               message,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.white,
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
               ),

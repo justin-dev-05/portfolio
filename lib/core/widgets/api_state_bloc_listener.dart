@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdi_dost/core/widgets/app_dialogs.dart';
-import 'package:pdi_dost/core/utils/app_nav.dart';
 
 class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatefulWidget {
   final Widget child;
@@ -18,13 +17,16 @@ class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatefulWidget {
   /// Function to extract error message from failure state
   final String? Function(S state)? errorExtractor;
 
+  /// Function to extract success message from success state
+  final String? Function(S state)? successMessageExtractor;
+
   /// Whether to show success dialog
   final bool showSuccessDialog;
 
   /// Whether to automatically pop the current route on success
   final bool autoPopOnSuccess;
 
-  /// Success message to display
+  /// Success message to display (fallback if extractor is null or returns null)
   final String? successMessage;
 
   /// Success dialog title
@@ -46,6 +48,7 @@ class ApiStateBlocListener<B extends BlocBase<S>, S> extends StatefulWidget {
     required this.successStateType,
     required this.failureStateType,
     this.errorExtractor,
+    this.successMessageExtractor,
     this.showSuccessDialog = false,
     this.autoPopOnSuccess = false,
     this.successMessage,
@@ -71,10 +74,7 @@ class _ApiStateBlocListenerState<B extends BlocBase<S>, S>
         final stateType = state.runtimeType;
         final isCurrent = ModalRoute.of(context)?.isCurrent ?? true;
 
-        // This prevents multiple dialogs from background screens.
-        if (!isCurrent && !_iStartedLoading) {
-          return;
-        }
+        if (!isCurrent && !_iStartedLoading) return;
 
         if (stateType == widget.loadingStateType) {
           if (isCurrent) {
@@ -88,15 +88,18 @@ class _ApiStateBlocListenerState<B extends BlocBase<S>, S>
           }
 
           if (widget.autoPopOnSuccess && Navigator.of(context).canPop()) {
-            AppNav.pop(context);
+            Navigator.of(context).pop();
           }
 
           if (widget.showSuccessDialog) {
+            final msg =
+                widget.successMessageExtractor?.call(state) ??
+                widget.successMessage ??
+                'Operation completed successfully';
             AppDialogs.showMessage(
               context: context,
               title: widget.successTitle,
-              message:
-                  widget.successMessage ?? 'Operation completed successfully',
+              message: msg,
               positiveButton: 'Okay',
               icon: Icons.check_circle_outline_rounded,
               iconColor: Colors.green,
@@ -124,8 +127,6 @@ class _ApiStateBlocListenerState<B extends BlocBase<S>, S>
             callback: widget.onFailure,
           );
         } else {
-          // If state is neither loading, success, nor failure, reset the flag.
-          // This handles cases where state might transition elsewhere.
           _iStartedLoading = false;
         }
       },

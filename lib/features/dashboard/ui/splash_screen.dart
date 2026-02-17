@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/constants/assets_constant.dart';
 import 'package:pdi_dost/core/utils/app_nav.dart';
@@ -109,7 +110,9 @@ class _SplashScreenState extends State<SplashScreen> {
                         borderRadius: BorderRadius.circular(10.r),
                         child: LinearProgressIndicator(
                           minHeight: 4.h,
-                          backgroundColor: Colors.white.withValues(alpha: 0.1),
+                          backgroundColor: AppColors.white.withValues(
+                            alpha: 0.1,
+                          ),
                           valueColor: AlwaysStoppedAnimation<Color>(
                             Theme.of(context).colorScheme.secondary,
                           ),
@@ -120,7 +123,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     Text(
                       AppStrings.preparing,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: AppColors.white.withValues(alpha: 0.6),
                         fontSize: 12.sp,
                         letterSpacing: 3,
                         fontWeight: FontWeight.w600,

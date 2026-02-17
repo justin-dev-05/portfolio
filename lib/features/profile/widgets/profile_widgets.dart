@@ -40,96 +40,112 @@ class ProfileHeader extends StatelessWidget {
 
         return Column(
           children: [
-            Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(5.r),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [
-                        primaryColor,
-                        primaryColor.withValues(alpha: 0.3),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: Hero(
-                    tag: 'profile_avatar',
-                    child: CircleAvatar(
-                      radius: 50.r,
-                      backgroundColor: AppColors.white,
-                      child: CircleAvatar(
-                        radius: 47.r,
-                        backgroundImage: profileImg.isNotEmpty
-                            ? (profileImg.startsWith('http')
-                                  ? NetworkImage(profileImg)
-                                  : FileImage(File(profileImg))
-                                        as ImageProvider)
-                            : const NetworkImage('https://i.pravatar.cc/300'),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 4.r,
-                  right: 4.r,
-                  child: GestureDetector(
-                    onTap: () => showImagePicker(context),
-                    child: Container(
-                      padding: EdgeInsets.all(8.r),
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2.w),
-                        boxShadow: [
-                          BoxShadow(
-                            color: primaryColor.withValues(alpha: 0.4),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
+            GestureDetector(
+              onTap: () => showImagePicker(context),
+              child: Stack(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(5.r),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          primaryColor,
+                          primaryColor.withValues(alpha: 0.3),
                         ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      child: Icon(
-                        Icons.camera_alt_rounded,
-                        color: Colors.white,
-                        size: 16.sp,
+                    ),
+                    child: Hero(
+                      tag: 'profile_avatar',
+                      child: CircleAvatar(
+                        radius: 50.r,
+                        backgroundColor: AppColors.white,
+                        child: CircleAvatar(
+                          radius: 47.r,
+                          backgroundImage: profileImg.isNotEmpty
+                              ? (profileImg.startsWith('http')
+                                    ? NetworkImage(profileImg)
+                                    : FileImage(File(profileImg))
+                                          as ImageProvider)
+                              : const NetworkImage('https://i.pravatar.cc/300'),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    bottom: 4.r,
+                    right: 4.r,
+                    child: GestureDetector(
+                      // onTap: () => showImagePicker(context),
+                      child: Container(
+                        padding: EdgeInsets.all(8.r),
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.white,
+                            width: 2.w,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: primaryColor.withValues(alpha: 0.4),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.camera_alt_rounded,
+                          color: AppColors.white,
+                          size: 16.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             if (showText) ...[
               SizedBox(height: 5.h),
               Text(
-                name,
+                // name,
+                "User Name",
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
-                  color: isDarkHeader ? Colors.white : null,
+                  color: isDarkHeader ? AppColors.white : null,
                 ),
               ),
-              SizedBox(height: 2.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: isDarkHeader
-                      ? Colors.white.withValues(alpha: 0.2)
-                      : primaryColor.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Text(
-                  email,
-                  style: TextStyle(
-                    color: isDarkHeader ? Colors.white : primaryColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12.sp,
-                  ),
+              SizedBox(height: 1.h),
+              Text(
+                // email,
+                "testuser@gmail.com",
+                style: TextStyle(
+                  color: isDarkHeader ? AppColors.white : primaryColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12.sp,
                 ),
               ),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+              //   decoration: BoxDecoration(
+              //     color: isDarkHeader
+              //         ? AppColors.white.withValues(alpha: 0.2)
+              //         : primaryColor.withValues(alpha: 0.08),
+              //     borderRadius: BorderRadius.circular(20.r),
+              //   ),
+              //   child: Text(
+              //     email,
+              //     style: TextStyle(
+              //       color: isDarkHeader ? AppColors.white : primaryColor,
+              //       fontWeight: FontWeight.w600,
+              //       fontSize: 12.sp,
+              //     ),
+              //   ),
+              // ),
             ],
           ],
         );
@@ -149,7 +165,7 @@ Widget buildSectionTitle(String title, BuildContext context) {
         style: TextStyle(
           fontSize: 18.sp,
           fontWeight: FontWeight.w700,
-          color: isDark ? Colors.white : Colors.black.withValues(alpha: 0.8),
+          color: isDark ? AppColors.white : Colors.black.withValues(alpha: 0.8),
           letterSpacing: -0.2,
         ),
       ),
@@ -166,7 +182,9 @@ Widget buildSectionCard(
     child: Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: isDark ? Colors.white.withValues(alpha: 0.04) : Colors.white,
+        color: isDark
+            ? AppColors.white.withValues(alpha: 0.04)
+            : AppColors.white,
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           if (!isDark)
@@ -223,7 +241,9 @@ Widget buildSettingsTile({
         leading: Container(
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            color: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.white,
+            color: isDark
+                ? AppColors.white.withValues(alpha: 0.05)
+                : AppColors.white,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
@@ -240,7 +260,7 @@ Widget buildSettingsTile({
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16.sp,
-            color: isDark ? Colors.white : Colors.black87,
+            color: isDark ? AppColors.white : Colors.black87,
           ),
         ),
         trailing:
@@ -259,7 +279,7 @@ Widget buildSettingsTile({
             height: 1,
             thickness: 1,
             color: isDark
-                ? Colors.white.withValues(alpha: 0.05)
+                ? AppColors.white.withValues(alpha: 0.05)
                 : Colors.grey.withValues(alpha: 0.08),
           ),
         ),

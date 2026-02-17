@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'shimmer_item.dart';
 
 class ApiLoadingWidget extends StatelessWidget {
@@ -13,7 +14,7 @@ class ApiLoadingWidget extends StatelessWidget {
       children: [
         SizedBox(height: 20.h),
         LoadingAnimationWidget.staggeredDotsWave(
-          color: Colors.white,
+          color: AppColors.white,
           size: 200,
         ),
         // SpinKitWave(color: Colors.blueAccent, size: 30.r),

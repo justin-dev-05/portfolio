@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:pdi_dost/features/auth/model/LoginModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
@@ -9,6 +11,31 @@ class UserPreferences {
   static const String _keyIsFromNotification = 'is_from_notification';
   static const String _keyEventId = 'event_id';
   static const String _keyEventName = 'event_name';
+  static const String loginKey = 'USER_DATA';
+
+  Future<void> saveSignInInfo(LoginData? data) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (data == null) {
+      await prefs.remove(loginKey);
+    } else {
+      await prefs.setString(loginKey, json.encode(data.toJson()));
+    }
+  }
+
+  Future<LoginData?> getSignInInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString(loginKey);
+    if (jsonString != null) {
+      Map<String, dynamic> jsonMap = json.decode(jsonString);
+      return LoginData.fromJson(jsonMap);
+    }
+    return null;
+  }
+
+  Future<void> clearSignInInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(loginKey);
+  }
 
   Future<void> setFirebaseToken(String token) async {
     final prefs = await SharedPreferences.getInstance();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdi_dost/core/constants/app_strings.dart';
+import 'package:pdi_dost/core/constants/helper.dart';
 import 'package:pdi_dost/core/widgets/common_scaffold.dart';
 import 'package:pdi_dost/features/auth/bloc/auth/auth_bloc.dart';
 import 'package:pdi_dost/features/dashboard/bloc/bottom_nav/bottom_nav_bloc.dart';
@@ -123,7 +124,9 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         String name = "User";
         if (state is AuthAuthenticated) {
-          name = state.username.isNotEmpty ? state.username : "User Name";
+          name = state.username.isNotEmpty
+              ? state.username.capitalize()
+              : "User Name";
         }
 
         return Toolbar.homeHeader(

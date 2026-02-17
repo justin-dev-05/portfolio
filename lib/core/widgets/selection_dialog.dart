@@ -79,7 +79,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
     return Container(
       height: 0.75.sh,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.backgroundDark : Colors.white,
+        color: isDark ? AppColors.backgroundDark : AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
       ),
       child: Column(
@@ -103,7 +103,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20.sp,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -112,13 +112,13 @@ class _SelectionDialogState extends State<SelectionDialog> {
                   child: Container(
                     padding: EdgeInsets.all(8.r),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.white.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.close_rounded,
                       size: 20.sp,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -211,7 +211,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
                             color: isSelected
                                 ? AppColors.primaryLight.withValues(alpha: 0.08)
                                 : isDark
-                                ? Colors.white.withValues(alpha: 0.03)
+                                ? AppColors.white.withValues(alpha: 0.03)
                                 : Colors.grey.withValues(alpha: 0.03),
                             borderRadius: BorderRadius.circular(16.r),
                             border: Border.all(
@@ -233,7 +233,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
                                     color: isSelected
                                         ? AppColors.primaryLight
                                         : (isDark
-                                              ? Colors.white.withValues(
+                                              ? AppColors.white.withValues(
                                                   alpha: 0.8,
                                                 )
                                               : AppColors.textPrimaryLight),
