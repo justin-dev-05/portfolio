@@ -9,7 +9,7 @@ import 'package:pdi_dost/features/auth/bloc/onboarding/onboarding_bloc.dart';
 import 'package:pdi_dost/core/widgets/app_button.dart';
 import 'package:pdi_dost/features/auth/data/models/OnboardingData.dart';
 import '../login/login_screen.dart';
-import '../widgets/onboarding_widgets.dart';
+import '../../widgets/onboarding_widgets.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

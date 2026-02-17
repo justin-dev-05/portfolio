@@ -43,7 +43,7 @@ class AppSnackBar {
     messenger.showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         duration: const Duration(seconds: 3),
         content: _SnackBarContent(

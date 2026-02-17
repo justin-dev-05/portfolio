@@ -253,7 +253,7 @@ class AppDialogs {
         final isDark = isDarkMode(context);
         return Center(
           child: Material(
-            color: Colors.transparent,
+            color: AppColors.transparent,
             child: Container(
               width: 0.8.sw,
               padding: EdgeInsets.all(24.r),
@@ -407,7 +407,7 @@ class _AppDialogContentState extends State<_AppDialogContent> {
     final isDark = isDarkMode(context);
     return Center(
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: Container(
           width: 0.8.sw,
           constraints: BoxConstraints(maxHeight: 0.8.sh),

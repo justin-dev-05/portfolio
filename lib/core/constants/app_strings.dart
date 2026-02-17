@@ -218,4 +218,5 @@ class ValidationStrings {
   static const lettersAndNumbers = 'Must include letters & numbers';
   static const passwordsDoNotMatch = 'Passwords do not match';
   static const passwordRequired = 'Password is required';
+  static const notFound = 'No items found';
 }

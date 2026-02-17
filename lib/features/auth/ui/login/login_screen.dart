@@ -233,9 +233,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: AppStrings.joinAsCJ,
                             fontWeight: FontWeight.w800,
                             textColor: theme.primaryColor,
-                            onPressed: () {},
-                            // onPressed: () =>
-                            //     AppNav.push(context, const CjRequestScreen()),
+                            // onPressed: () {},
+                            onPressed: () =>
+                                AppNav.push(context, const CjRequestScreen()),
                           ),
                         ],
                       ),

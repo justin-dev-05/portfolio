@@ -71,7 +71,7 @@ class AppButton extends StatelessWidget {
           elevation: effectiveEnabled ? 2 : 0,
           shadowColor: effectiveEnabled
               ? AppColors.primaryLight.withValues(alpha: 0.3)
-              : Colors.transparent,
+              : AppColors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius ?? 16.r),
           ),

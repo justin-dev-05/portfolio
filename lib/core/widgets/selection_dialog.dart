@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
+import 'package:pdi_dost/core/constants/app_strings.dart';
 import 'package:pdi_dost/core/widgets/app_text_field.dart';
 
 class SelectionDialog extends StatefulWidget {
@@ -29,7 +30,7 @@ class SelectionDialog extends StatefulWidget {
     return showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (context) => SelectionDialog(
         title: title,
         items: items,
@@ -167,14 +168,15 @@ class _SelectionDialogState extends State<SelectionDialog> {
                       children: [
                         Icon(
                           Icons.search_off_rounded,
-                          size: 64.sp,
+                          size: 62.sp,
                           color: isDark
                               ? Colors.white10
-                              : Colors.grey.withValues(alpha: 0.1),
+                              // : Colors.grey.withValues(alpha: 0.1),
+                              : AppColors.primaryLight,
                         ),
-                        SizedBox(height: 16.h),
+                        SizedBox(height: 5.h),
                         Text(
-                          'No items found',
+                          ValidationStrings.notFound,
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: isDark
@@ -197,7 +199,6 @@ class _SelectionDialogState extends State<SelectionDialog> {
                     itemBuilder: (context, index) {
                       final item = _filteredItems[index];
                       final isSelected = item == widget.selectedItem;
-
                       return GestureDetector(
                         onTap: () => widget.onSelected(item),
                         child: AnimatedContainer(
@@ -219,7 +220,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
                                   ? AppColors.primaryLight.withValues(
                                       alpha: 0.3,
                                     )
-                                  : Colors.transparent,
+                                  : AppColors.transparent,
                               width: 1.5,
                             ),
                           ),

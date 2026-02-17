@@ -3,7 +3,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdi_dost/core/constants/app_colors.dart';
 
-import '../../data/models/OnboardingData.dart';
+import '../data/models/OnboardingData.dart';
 
 class OnboardingBackground extends StatelessWidget {
   final PageController pageController;

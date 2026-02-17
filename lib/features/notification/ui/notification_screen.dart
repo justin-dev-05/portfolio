@@ -149,7 +149,7 @@ class _NotificationItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: isRead
-              ? Colors.transparent
+              ? AppColors.transparent
               : AppColors.primaryLight.withValues(alpha: 0.3),
           width: 1,
         ),

@@ -196,7 +196,7 @@ Widget buildSectionCard(
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: Column(children: children),
       ),
     ),

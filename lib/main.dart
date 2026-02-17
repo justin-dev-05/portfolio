@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdi_dost/core/constants/app_colors.dart';
 import 'package:pdi_dost/core/network/network_cubit.dart';
 import 'package:pdi_dost/core/theme/app_theme.dart';
 import 'package:pdi_dost/core/theme/theme_bloc.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: const SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
+            statusBarColor: AppColors.transparent,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),

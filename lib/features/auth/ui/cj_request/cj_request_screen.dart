@@ -34,7 +34,6 @@ class _CjRequestScreenState extends State<CjRequestScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       AppDialogs.showLoading(context);
       await _controller.fetchCountries();
-      // ignore: use_build_context_synchronously
       AppDialogs.hideLoading(context);
     });
   }

@@ -28,9 +28,9 @@ class AppTheme {
       backgroundColor: AppColors.white,
       elevation: 0,
       centerTitle: true,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: AppColors.transparent,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: AppColors.transparent,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
       ),
@@ -118,9 +118,9 @@ class AppTheme {
       backgroundColor: AppColors.surfaceDark,
       elevation: 0,
       centerTitle: true,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: AppColors.transparent,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: AppColors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
       ),
