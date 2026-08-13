@@ -7,7 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_portfolio/core/constants/portfolio_data.dart';
+import 'package:flutter_portfolio/core/utils/resume_helper.dart';
 import '../blocs/portfolio_bloc.dart';
+
 
 class ProfileContactCard extends StatelessWidget {
   const ProfileContactCard({super.key});
@@ -184,7 +186,8 @@ class _ResumeButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () => ResumeHelper.downloadResume(),
+
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

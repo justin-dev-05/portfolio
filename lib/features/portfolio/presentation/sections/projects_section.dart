@@ -3,79 +3,207 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_portfolio/core/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../domain/entities/project_entity.dart';
 import '../widgets/project_card.dart';
 import '../blocs/portfolio_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProjectsSection extends StatelessWidget {
+class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
+
+  @override
+  State<ProjectsSection> createState() => _ProjectsSectionState();
+}
+
+class _ProjectsSectionState extends State<ProjectsSection> {
+  String selectedCategory = 'All';
+
+  final List<String> categories = [
+    'All',
+    'Mobile Apps',
+    'Enterprise Systems',
+  ];
+
+  List<ProjectEntity> get filteredProjects {
+    return PortfolioConstants.projects.where((project) {
+      return selectedCategory == 'All' || project.category == selectedCategory;
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     final isMobile = Responsive.isMobile(context);
-    // final theme = Theme.of(context);
 
     return BlocBuilder<PortfolioBloc, PortfolioState>(
-        builder: (context, state) {
-      return Container(
-        width: double.infinity,
-        color:
-            state.isDark ? AppTheme.backgroundColor : const Color(0xFFF8FAFC),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 24.w : 100,
-            vertical: isMobile ? 20.h : 40,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ShaderMask(
-                shaderCallback: (bounds) =>
-                    AppTheme.primaryGradient.createShader(bounds),
-                child: Text(
-                  "Projects",
+      builder: (context, state) {
+        final filteredList = filteredProjects;
+
+        return Container(
+          width: double.infinity,
+          color: state.isDark
+              ? AppTheme.backgroundColor
+              : const Color(0xFFF8FAFC),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 20.w : 80.w,
+              vertical: isMobile ? 32.h : 60.h,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Category Pill Badge
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20.r),
+                    border: Border.all(
+                      color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.rocket_launch_rounded,
+                        size: 14.sp,
+                        color: AppTheme.primaryColor,
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        "PROVEN PORTFOLIO & QFS APP SUITE",
+                        style: GoogleFonts.outfit(
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.primaryColor,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ).animate().fadeIn(),
+                SizedBox(height: 16.h),
+
+                // Main Title
+                ShaderMask(
+                  shaderCallback: (bounds) =>
+                      AppTheme.primaryGradient.createShader(bounds),
+                  child: Text(
+                    "Featured Projects & Apps",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.outfit(
+                      fontSize: (isMobile ? 30 : 48).sp,
+                      fontWeight: FontWeight.bold,
+                      color: state.isDark ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                ).animate().fadeIn(delay: 100.ms),
+                SizedBox(height: 12.h),
+
+                // Subtitle
+                Text(
+                  "High-performance Mobile Applications, E-Commerce Storefronts, and Enterprise Management Platforms.",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.outfit(
-                    fontSize: (isMobile ? 32 : 54).sp,
-                    fontWeight: FontWeight.bold,
-                    color: state.isDark ? Colors.white : Colors.black87,
+                    fontSize: isMobile ? 14.sp : 16.sp,
+                    color: state.isDark ? Colors.white70 : Colors.black54,
+                    height: 1.4,
                   ),
+                ).animate().fadeIn(delay: 200.ms),
+                SizedBox(height: 24.h),
+
+                // Category Filter Chips
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: categories.map((cat) {
+                      final isSelected = selectedCategory == cat;
+                      return Padding(
+                        padding: EdgeInsets.only(right: 8.w),
+                        child: ChoiceChip(
+                          label: Text(cat),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            if (selected) {
+                              setState(() {
+                                selectedCategory = cat;
+                              });
+                            }
+                          },
+                          labelStyle: GoogleFonts.outfit(
+                            fontSize: 12.sp,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? Colors.white
+                                : (state.isDark
+                                    ? Colors.white70
+                                    : Colors.black87),
+                          ),
+                          selectedColor: AppTheme.primaryColor,
+                          backgroundColor: state.isDark
+                              ? const Color(0xFF1E293B)
+                              : const Color(0xFFE2E8F0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            side: BorderSide(
+                              color: isSelected
+                                  ? AppTheme.primaryColor
+                                  : Colors.transparent,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ).animate().fadeIn(delay: 300.ms),
+                SizedBox(height: 28.h),
+
+                // Counter Tag
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Showing ${filteredList.length} ${filteredList.length == 1 ? 'Project' : 'Projects'}",
+                      style: GoogleFonts.outfit(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: state.isDark ? Colors.white60 : Colors.black54,
+                      ),
+                    ),
+                  ],
                 ),
-              ).animate().fadeIn(),
-              SizedBox(height: 14.h),
-              Container(
-                width: 80,
-                height: 4,
-                decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
-                  borderRadius: BorderRadius.circular(2),
+                SizedBox(height: 16.h),
+
+                // Projects Grid View
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: isMobile ? 500 : 420,
+                    crossAxisSpacing: isMobile ? 16 : 24,
+                    mainAxisSpacing: isMobile ? 16 : 24,
+                    mainAxisExtent: 390,
+
+                  ),
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final project = filteredList[index];
+                    return ProjectCard(project: project)
+                        .animate()
+                        .fadeIn(delay: (60 * (index % 6)).ms)
+                        .slideY(begin: 0.08);
+                  },
                 ),
-              ).animate().fadeIn(delay: 200.ms).scaleX(),
-              SizedBox(height: 64.h),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: isMobile ? 500 : 450,
-                  crossAxisSpacing: isMobile ? 20 : 32,
-                  mainAxisSpacing: isMobile ? 20 : 32,
-                  mainAxisExtent: isMobile ? 400.h : 400.h,
-                ),
-                itemCount: PortfolioConstants.projects.length,
-                itemBuilder: (context, index) {
-                  final project = PortfolioConstants.projects[index];
-                  return ProjectCard(project: project)
-                      .animate()
-                      .fadeIn(delay: (100 * (index % 3)).ms)
-                      .slideY(begin: 0.1);
-                },
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

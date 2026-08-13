@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widgets/modern_cta.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../../core/utils/resume_helper.dart';
+
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -119,15 +121,49 @@ class HeroSection extends StatelessWidget {
           ),
         ),
 
+        // Senior Engineer Badge
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(
+                color: AppTheme.primaryColor.withValues(alpha: 0.4),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.stars_rounded, size: 14.sp, color: AppTheme.primaryColor),
+                SizedBox(width: 6.w),
+                Text(
+                  "SENIOR MOBILE APPLICATION ENGINEER (5+ YEARS EXP)",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.outfit(
+                    fontSize: (isMobile ? 10 : 12).sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primaryColor,
+                    letterSpacing: 1.1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ).animate().fadeIn(delay: 300.ms),
+
+        SizedBox(height: 16.h),
+
         // Main Title
         ShaderMask(
           shaderCallback: (bounds) =>
               AppTheme.primaryGradient.createShader(bounds),
           child: Text(
-            "FLUTTER DEVELOPER",
+            "FLUTTER & ANDROID EXPERT",
             textAlign: TextAlign.center,
             style: GoogleFonts.outfit(
-              fontSize: (isMobile ? 36 : 72).sp,
+              fontSize: (isMobile ? 32 : 64).sp,
               fontWeight: FontWeight.bold,
               height: 1.1,
               color: Colors.white,
@@ -135,18 +171,20 @@ class HeroSection extends StatelessWidget {
           ),
         ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.2),
 
-        SizedBox(height: 20.h),
+        SizedBox(height: 16.h),
 
         // Catchy Subtitle
         Text(
-          "I build beautiful, high-performance mobile experiences.",
+          "Architecting high-performance cross-platform mobile apps, intelligent AI integrations, & enterprise digital solutions.",
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
-            fontSize: (isMobile ? 18 : 24).sp,
+            fontSize: (isMobile ? 15 : 20).sp,
             fontWeight: FontWeight.w500,
             color: isDark ? Colors.white70 : Colors.black54,
           ),
         ).animate().fadeIn(delay: 800.ms),
+
+
 
         SizedBox(height: 48.h),
 
@@ -170,7 +208,13 @@ class HeroSection extends StatelessWidget {
               },
               isPrimary: false,
             ).animate().scale(delay: 1.1.seconds, curve: Curves.easeOutBack),
+            ModernCTA(
+              label: "Download CV",
+              onTap: () => ResumeHelper.downloadResume(),
+              isPrimary: false,
+            ).animate().scale(delay: 1.2.seconds, curve: Curves.easeOutBack),
           ],
+
         ),
       ],
     );

@@ -131,7 +131,39 @@ class _ContactSectionState extends State<ContactSection> {
                   color: state.isDark ? Colors.white70 : Colors.black54,
                 ),
               ).animate().fadeIn(delay: 200.ms),
-              SizedBox(height: 40.h),
+              SizedBox(height: 32.h),
+
+              // Quick Contact Info Cards
+              Wrap(
+                spacing: 16.w,
+                runSpacing: 16.h,
+                alignment: WrapAlignment.center,
+                children: [
+                  _buildQuickContactTile(
+                    Icons.phone_iphone_rounded,
+                    "Phone / Call",
+                    "+91 7359792115",
+                    "tel:+917359792115",
+                    state.isDark,
+                  ),
+                  _buildQuickContactTile(
+                    Icons.email_rounded,
+                    "Email Address",
+                    "justin1998.qf@gmail.com",
+                    "mailto:justin1998.qf@gmail.com",
+                    state.isDark,
+                  ),
+                  _buildQuickContactTile(
+                    Icons.location_on_rounded,
+                    "Location",
+                    "Vastral, Ahmedabad, India",
+                    null,
+                    state.isDark,
+                  ),
+                ],
+              ).animate().fadeIn(delay: 300.ms),
+              SizedBox(height: 36.h),
+
 
               // Form Container
               ConstrainedBox(
@@ -197,7 +229,73 @@ class _ContactSectionState extends State<ContactSection> {
       );
     });
   }
+
+  Widget _buildQuickContactTile(
+    IconData icon,
+    String label,
+    String value,
+    String? launchUri,
+    bool isDark,
+  ) {
+    return GestureDetector(
+      onTap: launchUri != null ? () => launchUrl(Uri.parse(launchUri)) : null,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E293B) : Colors.white,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(
+            color: AppTheme.primaryColor.withValues(alpha: 0.25),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.all(8.r),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, size: 18.sp, color: AppTheme.primaryColor),
+            ),
+            SizedBox(width: 12.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label,
+                  style: GoogleFonts.outfit(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white60 : Colors.black54,
+                  ),
+                ),
+                Text(
+                  value,
+                  style: GoogleFonts.outfit(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
+
 
 class ContactField extends StatelessWidget {
   final String label;
