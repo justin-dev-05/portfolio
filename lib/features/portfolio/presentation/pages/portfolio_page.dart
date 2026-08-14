@@ -87,8 +87,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
         _itemScrollController
             .scrollTo(
           index: state.scrollToSectionIndex,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeInOutCubic,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.fastOutSlowIn,
         )
             .then((_) {
           // Add a small delay for safety before enabling SectionChanged events again

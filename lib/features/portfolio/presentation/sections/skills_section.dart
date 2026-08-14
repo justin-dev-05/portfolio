@@ -19,74 +19,74 @@ class SkillsSection extends StatelessWidget {
       {
         'name': 'Flutter & Dart',
         'category': 'Cross-Platform',
-        'icon': Icons.flutter_dash,
+        'icon': FontAwesomeIcons.flutter,
         'color': const Color(0xFF02569B)
       },
       {
-        'name': 'Native Android (Kotlin/Java)',
-        'category': 'Mobile Native',
-        'icon': Icons.android,
+        'name': 'Native Android',
+        'category': 'Kotlin & Java',
+        'icon': FontAwesomeIcons.android,
         'color': const Color(0xFF3DDC84)
       },
       {
-        'name': 'BLoC & Provider',
+        'name': 'BLoC & State Mgmt',
         'category': 'Architecture',
-        'icon': Icons.layers_rounded,
-        'color': const Color(0xFF9C27B0)
+        'icon': FontAwesomeIcons.cubes,
+        'color': const Color(0xFF8E24AA)
       },
       {
-        'name': 'Clean MVVM',
-        'category': 'Architecture',
-        'icon': Icons.architecture,
-        'color': const Color(0xFFE91E63)
+        'name': 'Clean Architecture',
+        'category': 'MVVM & SOLID',
+        'icon': FontAwesomeIcons.diagramProject,
+        'color': const Color(0xFFEC407A)
       },
       {
-        'name': 'Google Gemini AI & OCR',
-        'category': 'AI / ML',
-        'icon': Icons.psychology_rounded,
-        'color': const Color(0xFF673AB7)
+        'name': 'Google Gemini AI',
+        'category': 'AI & ML Kit OCR',
+        'icon': FontAwesomeIcons.wandMagicSparkles,
+        'color': const Color(0xFF7C4DFF)
       },
       {
-        'name': 'Pine Labs POS & Barcode',
-        'category': 'Hardware Integration',
-        'icon': Icons.point_of_sale_rounded,
+        'name': 'Pine Labs POS',
+        'category': 'Barcode & Hardware',
+        'icon': FontAwesomeIcons.barcode,
         'color': const Color(0xFFFF9800)
       },
       {
         'name': 'Razorpay & Stripe',
-        'category': 'Payments',
-        'icon': Icons.credit_card_rounded,
-        'color': const Color(0xFF00C853)
+        'category': 'Payment Gateways',
+        'icon': FontAwesomeIcons.stripe,
+        'color': const Color(0xFF635BFF)
       },
       {
-        'name': 'HLS / DASH Streaming',
-        'category': 'Media',
-        'icon': Icons.play_circle_fill_rounded,
-        'color': const Color(0xFFF44336)
+        'name': 'HLS / DASH Media',
+        'category': 'Video Streaming',
+        'icon': FontAwesomeIcons.circlePlay,
+        'color': const Color(0xFFFF3D00)
       },
       {
-        'name': 'Firebase & WebSockets',
-        'category': 'Backend & Real-time',
-        'icon': Icons.local_fire_department,
+        'name': 'Firebase Cloud',
+        'category': 'FCM, Auth & Realtime',
+        'icon': FontAwesomeIcons.fire,
         'color': const Color(0xFFFFCA28)
       },
       {
         'name': 'REST API & Dio',
-        'category': 'Networking',
-        'icon': Icons.api,
+        'category': 'Networking & Web',
+        'icon': FontAwesomeIcons.networkWired,
         'color': const Color(0xFF00BCD4)
       },
       {
-        'name': 'Google Maps & GPS',
-        'category': 'Geospatial',
-        'icon': Icons.map_rounded,
+        'name': 'Google Maps GPS',
+        'category': 'Geofencing & Maps',
+        'icon': FontAwesomeIcons.mapLocationDot,
         'color': const Color(0xFF4CAF50)
       },
       {
         'name': 'Git & CI/CD',
-        'category': 'DevOps',
-        'icon': FontAwesomeIcons.github,
-        'color': const Color(0xFF212121)
+        'category': 'DevOps & Workflows',
+        'icon': FontAwesomeIcons.gitAlt,
+        'color': const Color(0xFFF05032)
       },
     ];
 
@@ -94,9 +94,8 @@ class SkillsSection extends StatelessWidget {
       builder: (context, state) {
         return Container(
           width: double.infinity,
-          color: state.isDark
-              ? AppTheme.backgroundColor
-              : const Color(0xFFF1F5F9),
+          color:
+              state.isDark ? AppTheme.backgroundColor : const Color(0xFFF1F5F9),
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: isMobile ? 20.w : 80.w,
@@ -106,7 +105,8 @@ class SkillsSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: AppTheme.primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20.r),
@@ -136,7 +136,6 @@ class SkillsSection extends StatelessWidget {
                   ),
                 ).animate().fadeIn(),
                 SizedBox(height: 14.h),
-
                 ShaderMask(
                   shaderCallback: (bounds) =>
                       AppTheme.primaryGradient.createShader(bounds),
@@ -151,7 +150,6 @@ class SkillsSection extends StatelessWidget {
                   ),
                 ).animate().fadeIn(delay: 100.ms),
                 SizedBox(height: 12.h),
-
                 Text(
                   "Production-grade mobile architecture, cross-platform engineering, and hardware integrations.",
                   textAlign: TextAlign.center,
@@ -161,15 +159,15 @@ class SkillsSection extends StatelessWidget {
                   ),
                 ).animate().fadeIn(delay: 150.ms),
                 SizedBox(height: 36.h),
-
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: isMobile ? 2 : (Responsive.isTablet(context) ? 3 : 4),
+                    crossAxisCount:
+                        isMobile ? 2 : (Responsive.isTablet(context) ? 3 : 4),
                     crossAxisSpacing: isMobile ? 12 : 20,
                     mainAxisSpacing: isMobile ? 12 : 20,
-                    mainAxisExtent: isMobile ? 130.h : 150.h,
+                    mainAxisExtent: isMobile ? 145.h : 165.h,
                   ),
                   itemCount: skills.length,
                   itemBuilder: (context, index) {
@@ -227,10 +225,8 @@ class _HoverSkillCardState extends State<HoverSkillCard> {
             padding: EdgeInsets.all(14.r),
             decoration: BoxDecoration(
               color: isHovered
-                  ? widget.color.withValues(alpha: 0.12)
-                  : (state.isDark
-                      ? const Color(0xFF1E293B)
-                      : Colors.white),
+                  ? widget.color.withValues(alpha: 0.14)
+                  : (state.isDark ? const Color(0xFF1E293B) : Colors.white),
               borderRadius: BorderRadius.circular(20.r),
               border: Border.all(
                 color: isHovered
@@ -243,8 +239,9 @@ class _HoverSkillCardState extends State<HoverSkillCard> {
               boxShadow: [
                 BoxShadow(
                   color: isHovered
-                      ? widget.color.withValues(alpha: 0.2)
-                      : Colors.black.withValues(alpha: state.isDark ? 0.2 : 0.03),
+                      ? widget.color.withValues(alpha: 0.22)
+                      : Colors.black
+                          .withValues(alpha: state.isDark ? 0.2 : 0.03),
                   blurRadius: isHovered ? 20 : 10,
                   offset: const Offset(0, 4),
                 )
@@ -254,16 +251,21 @@ class _HoverSkillCardState extends State<HoverSkillCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  padding: EdgeInsets.all(10.r),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 46.r,
+                  height: 46.r,
                   decoration: BoxDecoration(
-                    color: widget.color.withValues(alpha: 0.15),
+                    color:
+                        widget.color.withValues(alpha: isHovered ? 0.20 : 0.12),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    widget.icon,
-                    size: 26.sp,
-                    color: widget.color,
+                  child: Center(
+                    child: Icon(
+                      widget.icon,
+                      size: 19.sp,
+                      color: widget.color,
+                    ),
                   ),
                 ),
                 SizedBox(height: 10.h),

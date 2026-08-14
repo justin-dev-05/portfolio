@@ -19,6 +19,7 @@ class ProjectsSection extends StatefulWidget {
 
 class _ProjectsSectionState extends State<ProjectsSection> {
   String selectedCategory = 'All';
+  bool showAll = false;
 
   final List<String> categories = [
     'All',
@@ -39,6 +40,8 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     return BlocBuilder<PortfolioBloc, PortfolioState>(
       builder: (context, state) {
         final filteredList = filteredProjects;
+        final projectsToDisplay =
+            showAll ? filteredList : filteredList.take(5).toList();
 
         return Container(
           width: double.infinity,
@@ -130,6 +133,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                             if (selected) {
                               setState(() {
                                 selectedCategory = cat;
+                                showAll = false; // Reset expand state when category changes
                               });
                             }
                           },
@@ -163,42 +167,147 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                 ).animate().fadeIn(delay: 300.ms),
                 SizedBox(height: 28.h),
 
-                // Counter Tag
+                // Counter Tag & Toggle Header
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Showing ${filteredList.length} ${filteredList.length == 1 ? 'Project' : 'Projects'}",
+                      showAll || filteredList.length <= 5
+                          ? "Showing all ${filteredList.length} ${filteredList.length == 1 ? 'Project' : 'Projects'}"
+                          : "Showing Top 5 of ${filteredList.length} Projects",
                       style: GoogleFonts.outfit(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: state.isDark ? Colors.white60 : Colors.black54,
                       ),
                     ),
+                    if (filteredList.length > 5)
+                      TextButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            showAll = !showAll;
+                          });
+                        },
+                        icon: Icon(
+                          showAll
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded,
+                          size: 20.sp,
+                          color: AppTheme.primaryColor,
+                        ),
+                        label: Text(
+                          showAll ? "Show Less" : "Show All (${filteredList.length})",
+                          style: GoogleFonts.outfit(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.primaryColor,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
                 SizedBox(height: 16.h),
 
-                // Projects Grid View
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: isMobile ? 500 : 420,
-                    crossAxisSpacing: isMobile ? 16 : 24,
-                    mainAxisSpacing: isMobile ? 16 : 24,
-                    mainAxisExtent: 390,
-
+                // Projects Grid View with AnimatedSize
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeInOut,
+                  child: GridView.builder(
+                    key: ValueKey('grid-$selectedCategory-$showAll'),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: isMobile ? 500 : 420,
+                      crossAxisSpacing: isMobile ? 16 : 24,
+                      mainAxisSpacing: isMobile ? 16 : 24,
+                      mainAxisExtent: isMobile ? 400 : 410,
+                    ),
+                    itemCount: projectsToDisplay.length,
+                    itemBuilder: (context, index) {
+                      final project = projectsToDisplay[index];
+                      return ProjectCard(project: project)
+                          .animate()
+                          .fadeIn(delay: (40 * (index % 6)).ms)
+                          .slideY(begin: 0.05);
+                    },
                   ),
-                  itemCount: filteredList.length,
-                  itemBuilder: (context, index) {
-                    final project = filteredList[index];
-                    return ProjectCard(project: project)
-                        .animate()
-                        .fadeIn(delay: (60 * (index % 6)).ms)
-                        .slideY(begin: 0.08);
-                  },
                 ),
+
+                // Show More / Show Less Large Button
+                if (filteredList.length > 5) ...[
+                  SizedBox(height: 36.h),
+                  Center(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          showAll = !showAll;
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(30.r),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isMobile ? 24.w : 36.w,
+                          vertical: isMobile ? 12.h : 16.h,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: showAll
+                              ? null
+                              : AppTheme.primaryGradient,
+                          color: showAll
+                              ? (state.isDark
+                                  ? Colors.white.withValues(alpha: 0.1)
+                                  : Colors.black.withValues(alpha: 0.05))
+                              : null,
+                          borderRadius: BorderRadius.circular(30.r),
+                          border: showAll
+                              ? Border.all(
+                                  color: AppTheme.primaryColor.withValues(alpha: 0.5),
+                                  width: 1.5,
+                                )
+                              : null,
+                          boxShadow: showAll
+                              ? []
+                              : [
+                                  BoxShadow(
+                                    color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                                    blurRadius: 16,
+                                    offset: const Offset(0, 6),
+                                  ),
+                                ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              showAll
+                                  ? "Show Less Projects"
+                                  : "Show More Projects (${filteredList.length - 5} More)",
+                              style: GoogleFonts.outfit(
+                                fontSize: isMobile ? 13.sp : 15.sp,
+                                fontWeight: FontWeight.bold,
+                                color: showAll
+                                    ? (state.isDark ? Colors.white : AppTheme.primaryColor)
+                                    : Colors.white,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            Icon(
+                              showAll
+                                  ? Icons.keyboard_arrow_up_rounded
+                                  : Icons.keyboard_arrow_down_rounded,
+                              color: showAll
+                                  ? (state.isDark ? Colors.white : AppTheme.primaryColor)
+                                  : Colors.white,
+                              size: isMobile ? 20.sp : 22.sp,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ).animate().fadeIn(delay: 200.ms),
+                  ),
+                ],
               ],
             ),
           ),

@@ -118,7 +118,7 @@ class _ProjectCardState extends State<ProjectCard> {
                       children: [
                         // Card Top Visual Header with App Logo & Monogram
                         Container(
-                          height: 100.h,
+                          height: 120.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -129,16 +129,28 @@ class _ProjectCardState extends State<ProjectCard> {
                           ),
                           child: Stack(
                             children: [
-                              // Decorative Background Pattern Circle
+                              // Decorative Background Pattern Circles
                               Positioned(
-                                right: -20,
-                                bottom: -20,
+                                right: -25,
+                                bottom: -25,
                                 child: Container(
-                                  width: 100.r,
-                                  height: 100.r,
+                                  width: 110.r,
+                                  height: 110.r,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.white.withValues(alpha: 0.1),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: -30,
+                                top: -30,
+                                child: Container(
+                                  width: 90.r,
+                                  height: 90.r,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white.withValues(alpha: 0.06),
                                   ),
                                 ),
                               ),
@@ -146,24 +158,24 @@ class _ProjectCardState extends State<ProjectCard> {
                               // App Logo & App Name Visual Banner
                               Center(
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                  padding: EdgeInsets.symmetric(horizontal: 18.w),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       // Custom App Logo Container
                                       Container(
-                                        width: 44.r,
-                                        height: 44.r,
+                                        width: 48.r,
+                                        height: 48.r,
                                         decoration: BoxDecoration(
                                           color: Colors.black.withValues(alpha: 0.25),
-                                          borderRadius: BorderRadius.circular(14.r),
+                                          borderRadius: BorderRadius.circular(15.r),
                                           border: Border.all(
                                             color: Colors.white.withValues(alpha: 0.4),
                                             width: 1.5,
                                           ),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withValues(alpha: 0.2),
+                                              color: Colors.black.withValues(alpha: 0.25),
                                               blurRadius: 10,
                                               offset: const Offset(0, 4),
                                             ),
@@ -173,7 +185,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                           child: Text(
                                             _getAppInitials(widget.project.name),
                                             style: GoogleFonts.outfit(
-                                              fontSize: 16.sp,
+                                              fontSize: 18.sp,
                                               fontWeight: FontWeight.w900,
                                               color: Colors.white,
                                               letterSpacing: 1.0,
@@ -181,7 +193,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 12.w),
+                                      SizedBox(width: 14.w),
                                       Flexible(
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -192,7 +204,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.outfit(
-                                                fontSize: 16.sp,
+                                                fontSize: 18.sp,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white,
                                                 shadows: [
@@ -203,15 +215,15 @@ class _ProjectCardState extends State<ProjectCard> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(height: 2.h),
+                                            SizedBox(height: 3.h),
                                             Text(
                                               widget.project.clientOrPlatform ?? widget.project.category,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.outfit(
-                                                fontSize: 11.sp,
+                                                fontSize: 12.sp,
                                                 fontWeight: FontWeight.w500,
-                                                color: Colors.white.withValues(alpha: 0.85),
+                                                color: Colors.white.withValues(alpha: 0.88),
                                               ),
                                             ),
                                           ],
@@ -250,7 +262,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                 SizedBox(height: 6.h),
                                 Text(
                                   widget.project.description,
-                                  maxLines: 2,
+                                  maxLines: 5,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.outfit(
                                     fontSize: 11.sp,
@@ -260,8 +272,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                     height: 1.35,
                                   ),
                                 ),
-
-                                const Spacer(),
+                                SizedBox(height: 10.h),
 
 
                                 // Tech stack pills
@@ -302,6 +313,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                   SizedBox(height: 8.h),
                                 ],
 
+                                const Spacer(),
 
                                 // Action link
                                 Row(
