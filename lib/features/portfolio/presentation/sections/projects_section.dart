@@ -76,7 +76,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                       ),
                       SizedBox(width: 8.w),
                       Text(
-                        "PROVEN PORTFOLIO & QFS APP SUITE",
+                        "FEATURED PRODUCTION APPS & PORTFOLIO",
                         style: GoogleFonts.outfit(
                           fontSize: 11.sp,
                           fontWeight: FontWeight.bold,
@@ -125,39 +125,59 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                     children: categories.map((cat) {
                       final isSelected = selectedCategory == cat;
                       return Padding(
-                        padding: EdgeInsets.only(right: 8.w),
-                        child: ChoiceChip(
-                          label: Text(cat),
-                          selected: isSelected,
-                          onSelected: (selected) {
-                            if (selected) {
-                              setState(() {
-                                selectedCategory = cat;
-                                showAll = false; // Reset expand state when category changes
-                              });
-                            }
+                        padding: EdgeInsets.only(right: 10.w),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedCategory = cat;
+                              showAll = false;
+                            });
                           },
-                          labelStyle: GoogleFonts.outfit(
-                            fontSize: 12.sp,
-                            fontWeight: isSelected
-                                ? FontWeight.bold
-                                : FontWeight.w500,
-                            color: isSelected
-                                ? Colors.white
-                                : (state.isDark
-                                    ? Colors.white70
-                                    : Colors.black87),
-                          ),
-                          selectedColor: AppTheme.primaryColor,
-                          backgroundColor: state.isDark
-                              ? const Color(0xFF1E293B)
-                              : const Color(0xFFE2E8F0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                            side: BorderSide(
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 18.w,
+                              vertical: 10.h,
+                            ),
+                            decoration: BoxDecoration(
                               color: isSelected
                                   ? AppTheme.primaryColor
-                                  : Colors.transparent,
+                                  : (state.isDark
+                                      ? const Color(0xFF1E293B)
+                                      : const Color(0xFFE2E8F0)),
+                              borderRadius: BorderRadius.circular(16.r),
+                              border: Border.all(
+                                color: isSelected
+                                    ? AppTheme.primaryColor
+                                    : (state.isDark
+                                        ? Colors.white.withValues(alpha: 0.08)
+                                        : Colors.black.withValues(alpha: 0.06)),
+                                width: 1.2,
+                              ),
+                              boxShadow: isSelected
+                                  ? [
+                                      BoxShadow(
+                                        color: AppTheme.primaryColor
+                                            .withValues(alpha: 0.3),
+                                        blurRadius: 12,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ]
+                                  : [],
+                            ),
+                            child: Text(
+                              cat,
+                              style: GoogleFonts.outfit(
+                                fontSize: 13.sp,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.w600,
+                                color: isSelected
+                                    ? Colors.white
+                                    : (state.isDark
+                                        ? Colors.white70
+                                        : const Color(0xFF334155)),
+                              ),
                             ),
                           ),
                         ),

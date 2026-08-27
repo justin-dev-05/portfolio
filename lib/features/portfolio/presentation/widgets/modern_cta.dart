@@ -65,7 +65,7 @@ class ModernCTA extends StatelessWidget {
                         ? Colors.white
                         : (Theme.of(context).brightness == Brightness.dark
                             ? Colors.white
-                            : Colors.black87),
+                            : const Color(0xFF0F172A)),
                   ),
                 ),
         ),

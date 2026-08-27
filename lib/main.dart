@@ -28,13 +28,17 @@ class MyApp extends StatelessWidget {
             minTextAdapt: true,
             splitScreenMode: true,
             builder: (context, child) {
-              return MaterialApp.router(
-                title: 'Portfolio',
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: ThemeMode.system,
-                routerConfig: AppRouter.router,
+              return BlocBuilder<PortfolioBloc, PortfolioState>(
+                builder: (context, state) {
+                  return MaterialApp.router(
+                    title: 'Justin Mahida - Portfolio',
+                    debugShowCheckedModeBanner: false,
+                    theme: AppTheme.lightTheme,
+                    darkTheme: AppTheme.darkTheme,
+                    themeMode: state.isDark ? ThemeMode.dark : ThemeMode.light,
+                    routerConfig: AppRouter.router,
+                  );
+                },
               );
             },
           );

@@ -33,210 +33,216 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: (isDark
-                        ? const Color(0xFF0F172A).withValues(alpha: 0.85)
-                        : Colors.white.withValues(alpha: 0.85)),
-                    borderRadius: BorderRadius.circular(isMobile ? 16.r : 24.r),
-                    border: Border.all(
-                      color: (isDark ? Colors.white : Colors.black)
-                          .withValues(alpha: 0.08),
+                    decoration: BoxDecoration(
+                      color: (isDark
+                          ? const Color(0xFF0F172A).withValues(alpha: 0.85)
+                          : Colors.white.withValues(alpha: 0.92)),
+                      borderRadius: BorderRadius.circular(isMobile ? 16.r : 24.r),
+                      border: Border.all(
+                        color: (isDark
+                            ? Colors.white.withValues(alpha: 0.08)
+                            : const Color(0xFFE2E8F0)),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryColor
+                              .withValues(alpha: isDark ? 0.08 : 0.05),
+                          blurRadius: 20,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primaryColor
-                            .withValues(alpha: isDark ? 0.08 : 0.05),
-                        blurRadius: 20,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isMobile ? 12.w : 20.w,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Left: Logo & Name Branding
-                      Row(
-                        children: [
-                          if (!isDesktop)
-                            IconButton(
-                              icon: FaIcon(FontAwesomeIcons.bars, size: 16.sp),
-                              color: isDark ? Colors.white70 : Colors.black87,
-                              onPressed: () => Scaffold.of(context).openDrawer(),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                            ),
-                          if (!isDesktop) SizedBox(width: 10.w),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 12.w : 20.w,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Left: Logo & Name Branding
+                        Row(
+                          children: [
+                            if (!isDesktop)
+                              IconButton(
+                                icon: FaIcon(FontAwesomeIcons.bars, size: 16.sp),
+                                color: isDark ? Colors.white70 : const Color(0xFF0F172A),
+                                onPressed: () => Scaffold.of(context).openDrawer(),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                            if (!isDesktop) SizedBox(width: 10.w),
 
-                          // Avatar / Monogram Logo Badge
-                          GestureDetector(
-                            onTap: () => ProfileDialog.show(context),
-                            child: Container(
-                              width: isMobile ? 32.r : 40.r,
-                              height: isMobile ? 32.r : 40.r,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: AppTheme.primaryGradient,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppTheme.primaryColor
-                                        .withValues(alpha: 0.3),
-                                    blurRadius: 8,
-                                  )
-                                ],
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "JM",
-                                  style: GoogleFonts.outfit(
-                                    fontSize: isMobile ? 12.sp : 15.sp,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white,
-                                  ),
+                            // Avatar / Monogram Logo Badge
+                            GestureDetector(
+                              onTap: () => ProfileDialog.show(context),
+                              child: Container(
+                                width: isMobile ? 32.r : 40.r,
+                                height: isMobile ? 32.r : 40.r,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: AppTheme.primaryGradient,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppTheme.primaryColor
+                                          .withValues(alpha: 0.3),
+                                      blurRadius: 8,
+                                    )
+                                  ],
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10.w),
-
-                          // Name & Sub-badge
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Justin Mahida",
-                                style: GoogleFonts.outfit(
-                                  fontSize: isMobile ? 14.sp : 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark ? Colors.white : Colors.black87,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 6.r,
-                                    height: 6.r,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF10B981),
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  Text(
-                                    "Mobile App Developer",
+                                child: Center(
+                                  child: Text(
+                                    "JM",
                                     style: GoogleFonts.outfit(
-                                      fontSize: isMobile ? 10.sp : 11.sp,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppTheme.primaryColor,
+                                      fontSize: isMobile ? 12.sp : 15.sp,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-
-                      // Center: Modern Pill Navigation (Desktop)
-                      if (isDesktop)
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 6.w, vertical: 4.h),
-                          decoration: BoxDecoration(
-                            color: (isDark ? Colors.white : Colors.black)
-                                .withValues(alpha: 0.04),
-                            borderRadius: BorderRadius.circular(30.r),
-                            border: Border.all(
-                              color: (isDark ? Colors.white : Colors.black)
-                                  .withValues(alpha: 0.05),
                             ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              _NavItem(title: "Home", index: 0),
-                              _NavItem(title: "Projects", index: 1),
-                              _NavItem(title: "Skills", index: 2),
-                              _NavItem(title: "Experience", index: 3),
-                              _NavItem(title: "Contact", index: 4),
-                            ],
-                          ),
+                            SizedBox(width: 10.w),
+
+                            // Name & Sub-badge
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Justin Mahida",
+                                  style: GoogleFonts.outfit(
+                                    fontSize: isMobile ? 14.sp : 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: isDark ? Colors.white : const Color(0xFF0F172A),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 6.r,
+                                      height: 6.r,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFF10B981),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4.w),
+                                    Text(
+                                      "Mobile App Developer",
+                                      style: GoogleFonts.outfit(
+                                        fontSize: isMobile ? 10.sp : 11.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: isDark ? AppTheme.primaryColor : const Color(0xFF0284C7),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
 
-                      // Right: Actions (Theme Toggle & Profile Avatar)
-                      Row(
-                        children: [
-                          _ThemeToggle(),
-                          if (!isMobile) ...[
-                            SizedBox(width: 10.w),
-                            const _ProfileToggle(),
+                        // Center: Modern Pill Navigation (Desktop)
+                        if (isDesktop)
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6.w, vertical: 4.h),
+                            decoration: BoxDecoration(
+                              color: (isDark ? Colors.white : Colors.black)
+                                  .withValues(alpha: 0.04),
+                              borderRadius: BorderRadius.circular(30.r),
+                              border: Border.all(
+                                color: (isDark
+                                    ? Colors.white.withValues(alpha: 0.05)
+                                    : const Color(0xFFCBD5E1)),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _NavItem(title: "Home", index: 0),
+                                _NavItem(title: "Projects", index: 1),
+                                _NavItem(title: "Skills", index: 2),
+                                _NavItem(title: "Experience", index: 3),
+                                _NavItem(title: "Contact", index: 4),
+                              ],
+                            ),
+                          ),
+
+                        // Right: Actions (Theme Toggle & Profile Avatar)
+                        Row(
+                          children: [
+                            _ThemeToggle(),
+                            if (!isMobile) ...[
+                              SizedBox(width: 10.w),
+                              const _ProfileToggle(),
+                            ],
                           ],
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    }
+
+    @override
+    Size get preferredSize => Size.fromHeight(80.h);
   }
 
-  @override
-  Size get preferredSize => Size.fromHeight(80.h);
-}
+  class _NavItem extends StatelessWidget {
+    final String title;
+    final int index;
 
-class _NavItem extends StatelessWidget {
-  final String title;
-  final int index;
+    const _NavItem({required this.title, required this.index});
 
-  const _NavItem({required this.title, required this.index});
+    @override
+    Widget build(BuildContext context) {
+      return BlocBuilder<PortfolioBloc, PortfolioState>(
+        builder: (context, state) {
+          final isActive = state.activeIndex == index;
+          final isDark = state.isDark;
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PortfolioBloc, PortfolioState>(
-      builder: (context, state) {
-        final isActive = state.activeIndex == index;
-        final isDark = state.isDark;
-
-        return InkWell(
-          onTap: () {
-            context.read<PortfolioBloc>().add(ScrollToSectionRequested(index));
-          },
-          borderRadius: BorderRadius.circular(20.r),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            decoration: BoxDecoration(
-              color: isActive
-                  ? AppTheme.primaryColor.withValues(alpha: 0.18)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(20.r),
-              border: isActive
-                  ? Border.all(
-                      color: AppTheme.primaryColor.withValues(alpha: 0.4))
-                  : null,
-            ),
-            child: Text(
-              title,
-              style: GoogleFonts.outfit(
-                fontSize: 13.sp,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+          return InkWell(
+            onTap: () {
+              context.read<PortfolioBloc>().add(ScrollToSectionRequested(index));
+            },
+            borderRadius: BorderRadius.circular(20.r),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              decoration: BoxDecoration(
                 color: isActive
-                    ? AppTheme.primaryColor
-                    : (isDark ? Colors.white70 : Colors.black87),
+                    ? (isDark
+                        ? AppTheme.primaryColor.withValues(alpha: 0.18)
+                        : const Color(0xFF0284C7).withValues(alpha: 0.12))
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(20.r),
+                border: isActive
+                    ? Border.all(
+                        color: isDark
+                            ? AppTheme.primaryColor.withValues(alpha: 0.4)
+                            : const Color(0xFF0284C7).withValues(alpha: 0.4))
+                    : null,
+              ),
+              child: Text(
+                title,
+                style: GoogleFonts.outfit(
+                  fontSize: 13.sp,
+                  fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                  color: isActive
+                      ? (isDark ? AppTheme.primaryColor : const Color(0xFF0284C7))
+                      : (isDark ? Colors.white70 : const Color(0xFF334155)),
+                ),
               ),
             ),
-          ),
-        );
-      },
-    );
-  }
+          );
+        },
+      );
+    }
 }
 
 class _ThemeToggle extends StatelessWidget {
