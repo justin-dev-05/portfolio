@@ -240,7 +240,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                       maxCrossAxisExtent: isMobile ? 500 : 420,
                       crossAxisSpacing: isMobile ? 16 : 24,
                       mainAxisSpacing: isMobile ? 16 : 24,
-                      mainAxisExtent: isMobile ? 315 : 365,
+                      mainAxisExtent: isMobile ? 325 : 375,
                     ),
                     itemCount: projectsToDisplay.length,
                     itemBuilder: (context, index) {

@@ -274,8 +274,8 @@ class _ContactSectionState extends State<ContactSection> {
         _buildContactCard(
           icon: FontAwesomeIcons.envelope,
           title: "Email Address",
-          subtitle: "justin1998.qf@gmail.com",
-          onTap: () => launchUrl(Uri.parse("mailto:justin1998.qf@gmail.com")),
+          subtitle: PortfolioData.email,
+          onTap: () => launchUrl(Uri.parse("mailto:${PortfolioData.email}")),
           isDark: isDark,
           isMobile: isMobile,
         ),

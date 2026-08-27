@@ -118,7 +118,7 @@ class _ProjectCardState extends State<ProjectCard> {
                       children: [
                         // Card Top Visual Header with App Logo & Monogram
                         Container(
-                          height: 105.h,
+                          height: 115.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -164,11 +164,11 @@ class _ProjectCardState extends State<ProjectCard> {
                                     children: [
                                       // Custom App Logo Container
                                       Container(
-                                        width: 44.r,
-                                        height: 44.r,
+                                        width: 46.r,
+                                        height: 46.r,
                                         decoration: BoxDecoration(
                                           color: Colors.black.withValues(alpha: 0.25),
-                                          borderRadius: BorderRadius.circular(14.r),
+                                          borderRadius: BorderRadius.circular(15.r),
                                           border: Border.all(
                                             color: Colors.white.withValues(alpha: 0.4),
                                             width: 1.5,
@@ -185,7 +185,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                           child: Text(
                                             _getAppInitials(widget.project.name),
                                             style: GoogleFonts.outfit(
-                                              fontSize: 16.sp,
+                                              fontSize: 17.sp,
                                               fontWeight: FontWeight.w900,
                                               color: Colors.white,
                                               letterSpacing: 1.0,
