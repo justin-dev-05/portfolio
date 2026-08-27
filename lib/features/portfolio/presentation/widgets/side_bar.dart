@@ -249,7 +249,7 @@ class SideBar extends StatelessWidget {
                         _SocialIconButton(
                           icon: FontAwesomeIcons.github,
                           onTap: () => launchUrl(
-                              Uri.parse("https://github.com/justin1998qf")),
+                              Uri.parse("https://github.com/justin-dev-05")),
                           isDark: isDark,
                         ),
                         SizedBox(width: 12.w),
@@ -270,7 +270,7 @@ class SideBar extends StatelessWidget {
                         _SocialIconButton(
                           icon: FontAwesomeIcons.envelope,
                           onTap: () => launchUrl(
-                              Uri.parse("mailto:justin1998.qf@gmail.com")),
+                              Uri.parse("mailto:justinlikemja@gmail.com")),
                           isDark: isDark,
                         ),
                       ],

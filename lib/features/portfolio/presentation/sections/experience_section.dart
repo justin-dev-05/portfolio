@@ -21,7 +21,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
     {
       'company': 'Senior Mobile Application Engineer',
       'role': 'Flutter & Android Development Specialist',
-      'period': '5+ Years Experience (2019 - Present)',
+      'period': '2021 - Present',
       'location': 'Ahmedabad, India',
       'isCurrent': true,
       'highlights': [
@@ -136,7 +136,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                 SizedBox(height: 12.h),
 
                 Text(
-                  "5+ Years of Proven Senior Mobile Application Engineering in Flutter & Android",
+                  "Proven Mobile Application Engineering in Flutter & Android (2021 - Present)",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.outfit(
                     fontSize: isMobile ? 14.sp : 16.sp,

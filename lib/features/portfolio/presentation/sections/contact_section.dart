@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/constants/portfolio_data.dart';
 import '../../../../core/utils/responsive.dart';
 import '../blocs/portfolio_bloc.dart';
 import '../widgets/modern_cta.dart';
@@ -48,7 +49,7 @@ class _ContactSectionState extends State<ContactSection> {
         phone.isNotEmpty ? "Phone: $phone" : "Phone: Not provided";
 
     final Uri emailUrl = Uri.parse(
-      'mailto:justin1998.qf@gmail.com?subject=Portfolio Inquiry from $name&body=--- CONTACT DETAILS ---\n\n'
+      'mailto:${PortfolioData.email}?subject=Portfolio Inquiry from $name&body=--- CONTACT DETAILS ---\n\n'
       'Name: $name\n'
       'Email: $email\n'
       '$phoneDetails\n\n'
