@@ -183,7 +183,7 @@ class HeroSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6.r),
                   ),
                   child: Text(
-                    "5+ YEARS EXPERIENCE",
+                    "FLUTTER & ANDROID",
                     style: GoogleFonts.outfit(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.bold,
@@ -246,34 +246,43 @@ class HeroSection extends StatelessWidget {
           ],
         ).animate().fadeIn(delay: 450.ms),
 
-        SizedBox(height: 36.h),
+        SizedBox(height: isMobile ? 24.h : 36.h),
 
-        // Action Buttons Row
-        Wrap(
-          spacing: 16.w,
-          runSpacing: 16.h,
-          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
-          children: [
-            ModernCTA(
-              label: "Explore Work",
-              onTap: () {
-                context.read<PortfolioBloc>().add(ScrollToSectionRequested(1));
-              },
-              isPrimary: true,
-            ),
-            ModernCTA(
-              label: "Download CV",
-              onTap: () => ResumeHelper.downloadResume(),
-              isPrimary: false,
-            ),
-            ModernCTA(
-              label: "Contact Me",
-              onTap: () {
-                context.read<PortfolioBloc>().add(ScrollToSectionRequested(4));
-              },
-              isPrimary: false,
-            ),
-          ],
+        // Action Buttons Row (Compact Single Row on Mobile)
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            mainAxisAlignment: isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+            children: [
+              ModernCTA(
+                label: "Explore Work",
+                onTap: () {
+                  context.read<PortfolioBloc>().add(ScrollToSectionRequested(1));
+                },
+                isPrimary: true,
+                padding: isMobile ? EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h) : null,
+                fontSize: isMobile ? 13.sp : null,
+              ),
+              SizedBox(width: isMobile ? 10.w : 16.w),
+              ModernCTA(
+                label: "Download CV",
+                onTap: () => ResumeHelper.downloadResume(),
+                isPrimary: false,
+                padding: isMobile ? EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h) : null,
+                fontSize: isMobile ? 13.sp : null,
+              ),
+              SizedBox(width: isMobile ? 10.w : 16.w),
+              ModernCTA(
+                label: "Contact Me",
+                onTap: () {
+                  context.read<PortfolioBloc>().add(ScrollToSectionRequested(4));
+                },
+                isPrimary: false,
+                padding: isMobile ? EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h) : null,
+                fontSize: isMobile ? 13.sp : null,
+              ),
+            ],
+          ),
         ).animate().fadeIn(delay: 600.ms).scale(curve: Curves.easeOutBack),
       ],
     );
@@ -342,8 +351,8 @@ class HeroSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _CodeLine(line: "class JustinMahida extends Developer {", color: isDark ? Colors.white : const Color(0xFF0F172A)),
-                  _CodeLine(line: "  final String role = 'Senior Mobile Architect';", color: isDark ? AppTheme.primaryColor : const Color(0xFF0284C7)),
-                  _CodeLine(line: "  final int experienceYears = 5;", color: isDark ? AppTheme.secondaryColor : const Color(0xFF6366F1)),
+                  _CodeLine(line: "  final String role = 'Mobile Application Engineer';", color: isDark ? AppTheme.primaryColor : const Color(0xFF0284C7)),
+                  _CodeLine(line: "  final String location = 'Ahmedabad, India';", color: isDark ? AppTheme.secondaryColor : const Color(0xFF6366F1)),
                   _CodeLine(line: "  final List<String> techStack = [", color: isDark ? Colors.white70 : const Color(0xFF0F172A)),
                   _CodeLine(line: "    'Flutter & Dart', 'Android (Kotlin)',", color: isDark ? const Color(0xFF10B981) : const Color(0xFF059669)),
                   _CodeLine(line: "    'Gemini AI', 'Pine Labs POS', 'BLoC'", color: isDark ? const Color(0xFF10B981) : const Color(0xFF059669)),

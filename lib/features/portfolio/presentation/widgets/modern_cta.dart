@@ -8,6 +8,8 @@ class ModernCTA extends StatelessWidget {
   final VoidCallback onTap;
   final bool isPrimary;
   final bool isLoading;
+  final EdgeInsets? padding;
+  final double? fontSize;
 
   const ModernCTA({
     super.key,
@@ -15,6 +17,8 @@ class ModernCTA extends StatelessWidget {
     required this.onTap,
     this.isPrimary = true,
     this.isLoading = false,
+    this.padding,
+    this.fontSize,
   });
 
   @override
@@ -25,8 +29,9 @@ class ModernCTA extends StatelessWidget {
         onTap: isLoading ? null : onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: EdgeInsets.symmetric(
-              horizontal: 32.w, vertical: isLoading ? 14.h : 18.h),
+          padding: padding ??
+              EdgeInsets.symmetric(
+                  horizontal: 32.w, vertical: isLoading ? 14.h : 18.h),
           decoration: BoxDecoration(
             gradient: isPrimary ? AppTheme.primaryGradient : null,
             color: isPrimary ? null : Colors.transparent,
@@ -59,7 +64,7 @@ class ModernCTA extends StatelessWidget {
                   label,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.outfit(
-                    fontSize: 16.sp,
+                    fontSize: fontSize ?? 16.sp,
                     fontWeight: FontWeight.bold,
                     color: isPrimary
                         ? Colors.white
