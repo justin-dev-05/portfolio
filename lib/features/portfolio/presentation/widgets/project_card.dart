@@ -118,7 +118,7 @@ class _ProjectCardState extends State<ProjectCard> {
                       children: [
                         // Card Top Visual Header with App Logo & Monogram
                         Container(
-                          height: 120.h,
+                          height: 105.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -164,11 +164,11 @@ class _ProjectCardState extends State<ProjectCard> {
                                     children: [
                                       // Custom App Logo Container
                                       Container(
-                                        width: 48.r,
-                                        height: 48.r,
+                                        width: 44.r,
+                                        height: 44.r,
                                         decoration: BoxDecoration(
                                           color: Colors.black.withValues(alpha: 0.25),
-                                          borderRadius: BorderRadius.circular(15.r),
+                                          borderRadius: BorderRadius.circular(14.r),
                                           border: Border.all(
                                             color: Colors.white.withValues(alpha: 0.4),
                                             width: 1.5,
@@ -185,7 +185,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                           child: Text(
                                             _getAppInitials(widget.project.name),
                                             style: GoogleFonts.outfit(
-                                              fontSize: 18.sp,
+                                              fontSize: 16.sp,
                                               fontWeight: FontWeight.w900,
                                               color: Colors.white,
                                               letterSpacing: 1.0,
@@ -193,7 +193,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 14.w),
+                                      SizedBox(width: 12.w),
                                       Flexible(
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -204,7 +204,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.outfit(
-                                                fontSize: 18.sp,
+                                                fontSize: 17.sp,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white,
                                                 shadows: [
@@ -215,13 +215,13 @@ class _ProjectCardState extends State<ProjectCard> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(height: 3.h),
+                                            SizedBox(height: 2.h),
                                             Text(
                                               widget.project.clientOrPlatform ?? widget.project.category,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.outfit(
-                                                fontSize: 12.sp,
+                                                fontSize: 11.sp,
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.white.withValues(alpha: 0.88),
                                               ),
@@ -237,12 +237,10 @@ class _ProjectCardState extends State<ProjectCard> {
                           ),
                         ),
 
-
-
                         // Card Content
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.all(16.r),
+                            padding: EdgeInsets.all(14.r),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -251,7 +249,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.outfit(
-                                    fontSize: 14.sp,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.bold,
                                     height: 1.2,
                                     color: state.isDark
@@ -259,20 +257,20 @@ class _ProjectCardState extends State<ProjectCard> {
                                         : Colors.black87,
                                   ),
                                 ),
-                                SizedBox(height: 6.h),
+                                SizedBox(height: 4.h),
                                 Text(
                                   widget.project.description,
-                                  maxLines: 5,
+                                  maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.outfit(
                                     fontSize: 11.sp,
                                     color: state.isDark
                                         ? Colors.white70
                                         : Colors.black54,
-                                    height: 1.35,
+                                    height: 1.3,
                                   ),
                                 ),
-                                SizedBox(height: 10.h),
+                                SizedBox(height: 8.h),
 
 
                                 // Tech stack pills
