@@ -7,7 +7,7 @@ import 'resume_downloader_stub.dart'
     if (dart.library.html) 'resume_downloader_web.dart';
 
 class ResumeHelper {
-  static const String resumePath = 'assets/pdf/resume.pdf';
+  static const String resumePath = 'assets/pdf/cv.pdf';
 
   static Future<void> downloadResume() async {
     try {
@@ -15,7 +15,7 @@ class ResumeHelper {
       final List<int> bytes = data.buffer.asUint8List();
 
       if (kIsWeb) {
-        downloadResumeWeb(bytes, 'Justin_Resume.pdf');
+        downloadResumeWeb(bytes, 'Justin_CV.pdf');
       } else {
         // Mobile / Desktop fallback using Data URI
         final String base64Pdf = base64Encode(bytes);
